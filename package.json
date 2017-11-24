@@ -5,8 +5,8 @@
  "main": "server.js",
  "repository": "git@github.com:lysfibe/hackjunction2017.git",
  "scripts": {
-	 "start": "node server",
-	 "dev": "nodemon server"
+  "start": "node server",
+  "dev": "nodemon server"
  },
  "contributors": [
   "Louis Capitanchik <louis@lysfibe.co.uk>",
@@ -21,7 +21,9 @@
  },
  "dependencies": {
   "@commander-lol/server": "^1.0.1",
-  "dotenv": "^4.0.0"
+  "dotenv": "^4.0.0",
+  "ejs": "^2.5.7",
+  "koa-views": "^6.1.2"
  },
  "devDependencies": {
   "nodemon": "^1.12.1"
