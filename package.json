@@ -1,0 +1,29 @@
+{
+ "name": "HackJunction2017",
+ "version": "0.1.0",
+ "description": "Spotify Should Buy This, Obviously",
+ "main": "server.js",
+ "repository": "git@github.com:lysfibe/hackjunction2017.git",
+ "scripts": {
+	 "start": "node server",
+	 "dev": "nodemon server"
+ },
+ "contributors": [
+  "Louis Capitanchik <louis@lysfibe.co.uk>",
+  "Thomas Hewett <tom@lysfibe.co.uk",
+  "David Ralph <david@lysfibe.co.uk",
+  "Bethany Griggs <beth@lysfibe.co.uk"
+ ],
+ "license": "APACHE-2.0",
+ "private": true,
+ "engines": {
+  "node": "8"
+ },
+ "dependencies": {
+  "@commander-lol/server": "^1.0.1",
+  "dotenv": "^4.0.0"
+ },
+ "devDependencies": {
+  "nodemon": "^1.12.1"
+ }
+}
