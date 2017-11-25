@@ -1,6 +1,6 @@
-exports.create = async ctx => {
-	const params = ctx.request.body
-	const trackID = params.trackID
+exports.recommend = async ctx => {
+	const params = ctx.request.params
+	const { trackID } = params
 
 	if (trackID != null) {
 		const suggest = require('../../../services/suggest')
@@ -14,6 +14,14 @@ exports.create = async ctx => {
 		ctx.status = 422
 		ctx.body = 'missing data'
 	}
+}
+
+exports.create = async ctx => {
+	const { trackId, playlistId } = ctx.request.body
+	console.log(trackId, playlistId)
+	const track = await service.spotify.getTrack(trackId)
+	console.log(track)
+	ctx.body = track
 }
 
 exports.find = async ctx => {

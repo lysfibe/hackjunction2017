@@ -22,7 +22,7 @@ class Spotify {
 	}
 
 	async _auth() {
-		return service.cache.rememberFor('spotify-access-token', 1, async () => {
+		return service.cache.rememberFor('spotify-access-token', 5, async () => {
 			const id = env('spotify_client_id')
 			const secret = env('spotify_client_secret')
 

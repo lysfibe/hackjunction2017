@@ -12,6 +12,7 @@ module.exports = function defineRoutes(router) {
 	router.group('/api', api => {
 		api.get('/demos', controller('api/demos', 'find'))
 		api.post('/demos', controller('api/demos', 'create'))
+		api.get('/tracks/:trackId/recommendations', controller('api/demos', 'recommend'))
 
 		api.get('/suggestions/:trackId', controller('api/suggestions', 'trackById'))
 
