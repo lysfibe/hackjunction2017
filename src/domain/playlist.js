@@ -37,7 +37,7 @@ class Playlist {
         }
     }
 
-    get getRecentValue(){
+    get getRecentRating(){
       return 3;
     }
 
@@ -45,19 +45,15 @@ class Playlist {
       return 3;
     }
 
-    get getRecentValue(){
+    get getPopularityRating(){
       return 3;
     }
 
-    get getPopularity(){
+    get getCuratorFollowersCount(){
       return 3;
     }
 
-    get getCuratorFollowers(){
-      return 3;
-    }
-
-    get getCuratorNumberOfPlaylists() {
+    get getCuratorPlaylistCount() {
       return 3;
     }
 
