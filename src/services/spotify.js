@@ -42,12 +42,20 @@ class Spotify {
 		})
 	}
 
+	async getPlaylist(userID, playlistID) {
+		return this._request(`users/${userID}/playlists/${playlistID}`)
+	}
+
 	async getUserPlaylists(id) {
 		return this._request(`users/${id}/playlists`)
 	}
 
 	async getArtist(id) {
 		return this._request(`artists/${id}`)
+	}
+
+	async getArtistAlbums(id) {
+		return this._request(`artists/${id}/albums`)
 	}
 
 	async getTrack(id) {

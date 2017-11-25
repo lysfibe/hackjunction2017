@@ -2,7 +2,7 @@ const spotify = require('./spotify')
 
 class Suggest {
 
-    async suggestPlaylistsForTrack(trackID) {
+    static async suggestPlaylistsForTrack(trackID) {
 
         const track = await spotify.getTrack(trackID);
 
@@ -13,16 +13,17 @@ class Suggest {
 
         const artist = await spotify.getArtist(artistID);
 
-        const playlists = await _searchAndRefine(track, artist);
+        const playlists = await Suggest._searchAndRefine(track, artist);
 
-        return _formatResponse(track, artist, playlists);
+        return Suggest._formatResponse(track, artist, playlists);
     }
 
     /**
      * Converts Spotify track, artist, and (an array of) playlist formats 
      * to a suggestion resource.
      */
-    async _formatResponse(track, artist, playlists) {
+    static _formatResponse(track, artist, playlists) {
+        playlists = playlists || [];
         return {
             // TODO reasons
             track: {
@@ -37,28 +38,33 @@ class Suggest {
                     name: artist.name
                 }
             },
-            recommendedPlaylists: playlists.map(_formatPlaylist)
+            recommendedPlaylists: playlists.map(Suggest._formatPlaylist)
         }
     }
 
     /**
      * Converts Spotify's playlist format to our simplified format.
      */
-    async _formatPlaylist(p) {
+    static _formatPlaylist(p) {
 
+        // Image
         const hasImage = Array.isArray(p.images) && p.images.length;
         const image = hasImage ? p.images[0].url : undefined;
 
-        const dateEdited; // TODO - maybe get from last added track?
+        // Counts
+        const followerCount = p.followers ? p.followers.total : 0;
+        const trackCount = p.tracks ? p.tracks.total : 0;
+
+        const dateEdited = undefined; // TODO - maybe get from last added track?
 
         return {
             id: p.id,
             href: p.href,
             name: p.name,
             description: p.description,
-            followerCount: p.followers.total,
-            trackCount: p.tracks.total,
             image,
+            followerCount,
+            trackCount,
             dateEdited
         }
     }
@@ -67,9 +73,44 @@ class Suggest {
      * Returns an ordered array of playlists suitable for 
      * inclusion of track created by artist.
      */
-    async _searchAndRefine(track, artist) {
-        // TODO
-        return [];
+    static async _searchAndRefine(track, artist) {
+
+        if (!track) throw 'Track is required for playlist recommendation';
+        if (!artist) throw 'Artist is required for playlist recommendation';
+
+        let playlists = await Suggest._searchForPlaylists(track, artist);
+
+        // TODO Refine results
+
+        return playlists;
+
+    }
+
+    /**
+     * Full text search for playlists by artist genres or track name.
+     */
+    static async _searchForPlaylists(track, artist) {
+
+        // Note: Only artists have genres on Spotify
+        const q = Array.isArray(artist.genres)
+            ? artist.genres.join(' OR ')
+            : track.name;
+
+        const response = await spotify.search({
+            q,
+            type: 'playlist',
+            limit: 50
+        });
+
+        let playlists = response.playlists.items;
+
+        // Get full playlist objects
+        const lookup = p => spotify.getPlaylist(p.owner.id, p.id);
+        playlists = playlists.map(lookup);
+
+        return Promise.all(playlists);
     }
 
 }
+
+module.exports = Suggest;
