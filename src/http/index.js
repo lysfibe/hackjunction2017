@@ -15,6 +15,6 @@ module.exports = function defineRoutes(router) {
 		api.post('/suggestions', controller('api/suggestions', 'create'))
 		api.get('/suggestions/:trackId', controller('api/suggestions', 'trackById'))
 
-		api.get('/artists/:artistId', controller('api/artist', 'findById'))
+		api.get('/artists/:artistId', controller('api/artists', 'findById'))
 	})
 }
