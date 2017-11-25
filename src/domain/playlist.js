@@ -37,6 +37,30 @@ class Playlist {
         }
     }
 
-}
+    get getRecentValue(){
+      return 3;
+    }
+
+    get getPlaylistLength(){
+      return 3;
+    }
+
+    get getRecentValue(){
+      return 3;
+    }
+
+    get getPopularity(){
+      return 3;
+    }
+
+    get getCuratorFollowers(){
+      return 3;
+    }
+
+    get getCuratorNumberOfPlaylists() {
+      return 3;
+    }
+
+  }
 
 module.exports = Playlist;
