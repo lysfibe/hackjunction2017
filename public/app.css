@@ -269,3 +269,16 @@ small
     color: #FFF;
     background-color: transparent;
 }
+
+/* Interstitial Screen */
+
+.interstitial-screen,
+.suggestions-screen
+{
+    display: none;
+}
+
+.interstitial-screen .content
+{
+    margin-top: 105px;
+}

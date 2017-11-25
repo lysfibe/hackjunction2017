@@ -18,6 +18,15 @@ $( document ).ready(function() {
             },
             success: function(res) {
                 console.log(res);
+
+                // res should be the HTML of a list of playlists
+                // throw it into the DOM
+                $( '.playlist-suggestions' ).html(res);
+
+                $( '.interstitial-screen' ).fadeOut();
+                setTimeout(function() {
+                    $( '.suggestions-screen' ).fadeIn();
+                }, 500);
             },
             error: function(err) {
                 console.log(err);
@@ -25,7 +34,12 @@ $( document ).ready(function() {
         });
 
         // ^ while all this is happening, show the fancy transitioning screen :D
+        $( '.submissions-screen' ).fadeOut();
+        setTimeout(function() {
+            $( '.interstitial-screen' ).fadeIn();
+        }, 500);
 
+        
 
         
         // alert(trackID);
@@ -67,7 +81,7 @@ $( document ).ready(function() {
     
     /* give the page some time to load the resources without looking crap */
     setTimeout(function() {
-        $( '.full-screen' ).show();
+        $( '.full-screen:not(.interstitial-screen):not(.suggestions-screen)' ).show();
     }, 100);
 
     $( '#get-started-btn' ).click(getStarted);

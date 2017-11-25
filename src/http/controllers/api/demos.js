@@ -4,7 +4,11 @@ exports.create = async ctx => {
 
 	if (trackID != null) {
 		const suggest = require('../../../services/suggest')
-		const suggestedPlaylists = suggest.suggestPlaylistsForTrack(trackID)
+		const suggestedPlaylists = await suggest.suggestPlaylistsForTrack(trackID)
+
+		// pass the data into a template
+		// and in the template, loop through the playlists
+		// and just <ul><li><strong>Key:</strong></li><li>Value</li></ul>
 
 		ctx.body = suggestedPlaylists
 	} else {
