@@ -1,4 +1,8 @@
-const spotify = require('./spotify')
+const spotify = require('./spotify');
+const Playlist = require('../domain/playlist');
+
+const PLAYLIST_FOLLOWERS_MIN = 100;
+const PLAYLIST_TRACKS_MIN = 10;
 
 class Suggest {
 
@@ -43,29 +47,19 @@ class Suggest {
     }
 
     /**
-     * Converts Spotify's playlist format to our simplified format.
+     * Converts a playlist to a lightweight format.
      */
     static _formatPlaylist(p) {
-
-        // Image
-        const hasImage = Array.isArray(p.images) && p.images.length;
-        const image = hasImage ? p.images[0].url : undefined;
-
-        // Counts
-        const followerCount = p.followers ? p.followers.total : 0;
-        const trackCount = p.tracks ? p.tracks.total : 0;
-
-        const dateEdited = undefined; // TODO - maybe get from last added track?
-
         return {
             id: p.id,
             href: p.href,
             name: p.name,
             description: p.description,
-            image,
-            followerCount,
-            trackCount,
-            dateEdited
+            image: p.image,
+            followerCount: p.followerCount,
+            trackCount: p.trackCount,
+            //dateEdited: p.dateEdited(),
+            curator: p.curator
         }
     }
 
@@ -80,10 +74,18 @@ class Suggest {
 
         let playlists = await Suggest._searchForPlaylists(track, artist);
 
-        // TODO Refine results
+        // TODO - Refine results
+        // How recently music was added to the playlist 
+        // How recent the music in the playlist is
+        // Playlist length (saturation mitigation)
+        // PlaylistObject.length() 
+        // Genre relevance
+        // Popularity of music in the list 
+        // Curator followers
+        // How recent curator activity was
+        // Number of playlists curator has
 
         return playlists;
-
     }
 
     /**
@@ -96,6 +98,7 @@ class Suggest {
             ? artist.genres.join(' OR ')
             : track.name;
 
+        console.log(`Searching for playlists for "${track.name}"`);
         const response = await spotify.search({
             q,
             type: 'playlist',
@@ -103,12 +106,31 @@ class Suggest {
         });
 
         let playlists = response.playlists.items;
+        let apiCalls = playlists.length;
 
-        // Get full playlist objects
-        const lookup = p => spotify.getPlaylist(p.owner.id, p.id);
-        playlists = playlists.map(lookup);
+        // Filter out short playlists
+        playlists = playlists.filter(p => p.tracks.total >= PLAYLIST_TRACKS_MIN);
 
-        return Promise.all(playlists);
+        // Get full playlist details
+        console.log(`Requesting playlist details for "${track.name}"`);
+        const lookupPlaylist = p => spotify.getPlaylist(p.owner.id, p.id);
+        playlists = await Promise.all(playlists.map(lookupPlaylist));
+        apiCalls += playlists.length;
+
+        // Filter out insignificant playlists
+        playlists = playlists.filter(p => p.followers.total >= PLAYLIST_FOLLOWERS_MIN);
+
+        // Get full owner details
+        console.log(`Requesting curator details for "${track.name}"`);
+        const lookupOwner = async p => {
+            p.owner = await spotify.getUser(p.owner.id);
+            return p;
+        };
+        playlists = await Promise.all(playlists.map(lookupOwner));
+        apiCalls += playlists.length;
+
+        console.log(`Found ${playlists.length} suitable playlists for "${track.name}" using ${apiCalls} Spotify API calls`);
+        return playlists.map(p => new Playlist(p));
     }
 
 }
