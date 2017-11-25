@@ -1,9 +1,20 @@
 exports.create = async ctx => {
 	const params = ctx.request.body
+	const trackID = params.trackID
 
-	const response = { foo: 123 } // await myCallForData()
+	if (trackID != null) {
+		const suggest = require('../../../services/suggest')
+		const suggestedPlaylists = await suggest.suggestPlaylistsForTrack(trackID)
 
-	ctx.body = response
+		// pass the data into a template
+		// and in the template, loop through the playlists
+		// and just <ul><li><strong>Key:</strong></li><li>Value</li></ul>
+
+		ctx.body = suggestedPlaylists
+	} else {
+		ctx.status(422)
+		ctx.body = 'missing data'
+	}
 }
 
 exports.find = async ctx => {

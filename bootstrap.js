@@ -6,6 +6,11 @@ global.env = (name, fallback = null) => {
 	return fallback
 }
 
+global.fromRoot = function createAbsolutePath(...paths) {
+	const pathUtil = require('path')
+	return pathUtil.join(__dirname, ...paths)
+}
+
 global.service = {
 	get cache() {
 		return require('./src/services/cache')
@@ -17,5 +22,9 @@ global.service = {
 
 	get database() {
 		return require('./src/services/database')
-	}
+	},
+
+	get snippet() {
+		return require('./src/services/snippet')
+	},
 }

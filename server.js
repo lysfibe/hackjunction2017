@@ -22,6 +22,8 @@ app.use(views(pathUtil.join(__dirname , 'views'), {
 
 app.serve("/", pathUtil.join(__dirname, 'public'))
 
+app.body();
+
 app.routes(require('./src/http'))
 
 app.listen(env('port'))

@@ -1,0 +1,81 @@
+<!DOCTPYE html>
+
+<html>
+	<head>
+		<%- include partials/head.ejs %>
+		<style>
+			body {
+				color: white;
+			}
+			.track-content {
+				display: flex;
+				flex-direction: column;
+			}
+			.track-tags {
+				margin-top: auto;
+			}
+			.thumbnail {
+				position: relative;
+			}
+			.play {
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				position: absolute;
+				opacity: 0;
+				transition: 0.2s opacity linear;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+
+			.play:hover {
+				opacity: 1;
+				background-color: rgba(0,0,0,0.3);
+			}
+
+			.media-duration {
+				color: #BBBBBB;
+				margin: 10px;
+			}
+
+			.flex {
+				display: flex;
+				align-items: center;
+			}
+
+			.track-artist {
+				font-style: italic;
+			}
+		</style>
+	</head>
+	<body>
+		<div>
+			<% tracks.forEach(data => { %>
+				<div>
+					<div class="media-object">
+						<div class="media-object-section">
+							<div class="thumbnail">
+								<img src="<%= data.track.image %>">
+								<div class="play"><i class="fa fa-play fa-3x"></i></div>
+							</div>
+						</div>
+						<div class="media-object-section track-content">
+							<div class="flex">
+								<h4><%= data.track.name %></h4>
+								<span class="media-duration"><%= data.track.length %></span>
+							</div>
+							<span class="track-artist">By <%= data.track.artist.name %></span>
+							<div class="track-tags bottom">
+								<span class="label success">Great for Dancing</span>
+								<span class="label alert">Not very popular</span>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			<% }) %>
+		</div>
+	</body>
+</html>
