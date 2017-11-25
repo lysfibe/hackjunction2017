@@ -10,7 +10,7 @@ class Cache {
 	}
 
 	_createKey(key) {
-		return `${this.key}${key}`
+		return `${this._key}${key}`
 	}
 
 	async get(key) {
