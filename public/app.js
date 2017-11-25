@@ -85,15 +85,20 @@ $( document ).ready(function() {
 
     $('body').on('click', '.select-me-please-daddy', function(e) {
         const playlistId = $(this).data('playlist-id')
-		const trackId = $( '.submissions__demo-input' ).val();
+        const curatorId = $(this).data('curator-id')
+		const trackId = $( '.submissions__demo-input' ).val().split('/').pop();
         console.log(playlistId)
 
-        fetch('/api/demo', {
+        fetch('/api/demos', {
             method: 'POST',
             body: JSON.stringify({
                 playlistId,
                 trackId,
-            })
+                curatorId,
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
         }).then(response => response.json())
             .then(console.log)
             .catch(console.error)

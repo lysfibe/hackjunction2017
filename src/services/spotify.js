@@ -6,7 +6,7 @@ class Spotify {
 	async _request (uri, method = 'GET', opts = {}) {
 		const cacheKey = `${uri}//${method}//${JSON.stringify(opts)}`
 
-		return service.cache.rememberFor(cacheKey, 1, async () => {
+		return service.cache.rememberFor(cacheKey, 10, async () => {
 			const token = await this._auth()
 
 			const headers = opts.headers ?

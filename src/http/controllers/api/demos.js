@@ -17,11 +17,10 @@ exports.recommend = async ctx => {
 }
 
 exports.create = async ctx => {
-	const { trackId, playlistId } = ctx.request.body
-
 	const errors = ctx.validate({
 		trackId: trackId => !!trackId ? null : 'Track ID must be present',
 		playlistId: playlistId => !! playlistId ? null : 'Playlist ID must be present',
+		curatorId: curatorId => !! curatorId ? null : 'Curator ID must be present',
 	})
 
 	if (errors) {
@@ -30,14 +29,24 @@ exports.create = async ctx => {
 		return
 	}
 
+	const { trackId, playlistId, curatorId } = ctx.request.body
+
+	console.log(trackId, playlistId, curatorId)
+
 	const track = await service.spotify.getTrack(trackId)
+
+	console.log(track)
 	if (track.artists.length > 0) {
 		const [ artist ] = track.artists
-		await service.database.insert({
+		const re = await service.database.insert({
 			trackId,
 			playlistId,
+			curatorId,
 			artistId: artist.id,
 		})
+
+		console.log(re)
+
 		ctx.body = {
 			message: 'success',
 			ok: true,
