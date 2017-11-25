@@ -3,7 +3,7 @@ const request = require('request-promise')
 class Spotify {
 	static get Spotify() { return Spotify }
 
-	async _request (uri, method, opts) {
+	async _request (uri, method = 'GET', opts = {}) {
 		const token = await this._auth()
 
 		const headers = opts.headers ?
@@ -28,7 +28,6 @@ class Spotify {
 
 			const token = new Buffer(`${id}:${secret}`).toString('base64')
 
-			console.log(token)
 			const result = await request({
 				uri: 'https://accounts.spotify.com/api/token',
 				method: 'POST',
