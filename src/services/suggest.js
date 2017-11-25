@@ -98,6 +98,7 @@ class Suggest {
             ? artist.genres.join(' OR ')
             : track.name;
 
+        console.log(`Searching for playlists for ${track.name}`);
         const response = await spotify.search({
             q,
             type: 'playlist',
@@ -111,6 +112,7 @@ class Suggest {
         playlists = playlists.filter(p => p.tracks.total >= PLAYLIST_TRACKS_MIN);
 
         // Get full playlist details
+        console.log(`Requesting playlist details for ${track.name}`);
         const lookupPlaylist = p => spotify.getPlaylist(p.owner.id, p.id);
         playlists = await Promise.all(playlists.map(lookupPlaylist));
         apiCalls += playlists.length;
@@ -119,6 +121,7 @@ class Suggest {
         playlists = playlists.filter(p => p.followers.total >= PLAYLIST_FOLLOWERS_MIN);
 
         // Get full owner details
+        console.log(`Requesting curator details for ${track.name}`);
         const lookupOwner = async p => {
             p.owner = await spotify.getUser(p.owner.id);
             return p;
@@ -126,7 +129,7 @@ class Suggest {
         playlists = await Promise.all(playlists.map(lookupOwner));
         apiCalls += playlists.length;
 
-        console.log(`Found ${playlists.length} suitable playlists using ${apiCalls} API calls`);
+        console.log(`Found ${playlists.length} suitable playlists for ${track.name} using ${apiCalls} Spotify API calls`);
         return playlists.map(p => new Playlist(p));
     }
 
