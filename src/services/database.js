@@ -2,6 +2,8 @@ const { MongoClient } = require('mongodb')
 
 class Database {
 
+	static get Database() { return Database }
+
 	get _collection() {
 		return this._connection.then(db => db.collection('demos'))
 	}
@@ -33,8 +35,10 @@ class Database {
 		return new Promise((resolve, reject) => {
 			collection.find(query, (err, r) => {
 				if (err) reject(err)
-				else resolve(r)
+				else resolve(r.toArray())
 			})
 		})
 	}
 }
+
+module.exports = new Database()
