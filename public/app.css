@@ -1,0 +1,111 @@
+@font-face {
+    font-family: 'raleway';
+    src: url('/fonts/Raleway/Raleway-Medium.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'raleway';
+    src: url('/fonts/Raleway/Raleway-Black.ttf') format('truetype');
+    font-weight: 900;
+}
+
+@font-face {
+    font-family: 'raleway';
+    src: url('fonts/Raleway/Raleway-Bold.ttf') format('truetype');
+    font-weight: 600;
+}
+
+body
+{
+    background-color: black;
+}
+
+h1, h2, h3, p, a, li, span, button, input
+{
+    font-family: raleway, Helvetica, Arial, sans-serif;
+}
+
+h1, h2 h3
+{
+    font-weight: 900;
+}
+
+h1
+{
+    font-size: 48px;
+}
+
+h2
+{
+    font-size: 32px;
+}
+
+button
+{
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 18px 48px 16px;
+    border-radius: 500px;
+    box-shadow: rgb(97, 100, 103) 0px 0px 0px 2px inset;
+}
+
+small
+{
+    font-size: 10px;
+}
+
+.headline-text
+{
+    font-size: 80px;
+}
+
+.dimmed-text
+{
+    color: #919496;  
+}
+
+.black-text
+{
+    color: #000;
+}
+
+.white-text
+{
+    color: #FFF;
+}
+
+.full-screen
+{
+    width: 100vw;
+    height: 100vh;
+    box-sizing: border-box;
+}
+
+/* Navigation */
+
+.nav
+{
+    padding: 40px 0 40px 0;
+}
+
+.nav li
+{
+    list-style: none;
+    display: inline-block;
+}
+
+.nav__link
+{
+    color: #FFF;
+    font-weight: 600;
+    padding: 0 16px 0 16px;
+}
+
+/* Submissions Screen */
+
+.submissions-screen
+{
+    background-image: url('/images/submissions_bg.jpeg');
+    background-size: cover;
+}
