@@ -3,6 +3,8 @@ const Playlist = require('../domain/playlist');
 
 const PLAYLIST_FOLLOWERS_MIN = 100;
 const PLAYLIST_TRACKS_MIN = 10;
+const DESIRED_PLAYLISTS_FROM_SEARCH = 50;
+const MAX_API_CALLS_PER_REQUEST = 200;
 
 class Suggest {
 
@@ -78,9 +80,9 @@ class Suggest {
         // How recently music was added to the playlist 
         // How recent the music in the playlist is
         // Playlist length (saturation mitigation)
-        // PlaylistObject.length() 
         // Genre relevance
         // Popularity of music in the list 
+        // Diversity of artists
         // Curator followers
         // How recent curator activity was
         // Number of playlists curator has
@@ -93,44 +95,77 @@ class Suggest {
      */
     static async _searchForPlaylists(track, artist) {
 
+        const lookupPlaylistDetails = p => spotify.getPlaylist(p.owner.id, p.id);
+
+        const lookupPlaylistOwner = async p => {
+            p.owner = await spotify.getUser(p.owner.id);
+            return p;
+        };
+
         // Note: Only artists have genres on Spotify
         const q = Array.isArray(artist.genres)
             ? artist.genres.join(' OR ')
             : track.name;
 
-        console.log(`Searching for playlists for "${track.name}"`);
-        const response = await spotify.search({
-            q,
-            type: 'playlist',
-            limit: 50
-        });
+        let apiCalls = 0;
+        let offset = 0;
+        let playlists = [];
 
-        let playlists = response.playlists.items;
-        let apiCalls = playlists.length;
+        while (playlists.length < DESIRED_PLAYLISTS_FROM_SEARCH
+            && apiCalls < MAX_API_CALLS_PER_REQUEST) {
 
-        // Filter out short playlists
-        playlists = playlists.filter(p => p.tracks.total >= PLAYLIST_TRACKS_MIN);
+            try {
 
-        // Get full playlist details
-        console.log(`Requesting playlist details for "${track.name}"`);
-        const lookupPlaylist = p => spotify.getPlaylist(p.owner.id, p.id);
-        playlists = await Promise.all(playlists.map(lookupPlaylist));
-        apiCalls += playlists.length;
+                // REQUEST results from full-text search
+                console.log(`Searching for playlists for "${track.name}"`);
+                const response = await spotify.search({
+                    q, offset,
+                    type: 'playlist',
+                    limit: 50
+                });
+                apiCalls += 1;
+                offset += 50;
+                let items = response.playlists.items;
 
-        // Filter out insignificant playlists
-        playlists = playlists.filter(p => p.followers.total >= PLAYLIST_FOLLOWERS_MIN);
+                // Stop searching if no more results
+                if (!items.length) break;
 
-        // Get full owner details
-        console.log(`Requesting curator details for "${track.name}"`);
-        const lookupOwner = async p => {
-            p.owner = await spotify.getUser(p.owner.id);
-            return p;
-        };
-        playlists = await Promise.all(playlists.map(lookupOwner));
-        apiCalls += playlists.length;
+                // Filter out curator=spotify?
 
-        console.log(`Found ${playlists.length} suitable playlists for "${track.name}" using ${apiCalls} Spotify API calls`);
-        return playlists.map(p => new Playlist(p));
+                // FILTER out short playlists
+                items = items.filter(p => p.tracks.total >= PLAYLIST_TRACKS_MIN);
+
+
+                // REQUEST full playlist details
+                console.log(`Requesting playlist details for "${track.name}"`);
+                apiCalls += items.length;
+                items = await Promise.all(items.map(lookupPlaylistDetails));
+
+
+                // FILTER out playlists with few followers
+                items = items.filter(p => p.followers.total >= PLAYLIST_FOLLOWERS_MIN);
+
+
+                // REQUEST full owner details
+                console.log(`Requesting curator details for "${track.name}"`);
+                apiCalls += items.length;
+                items = await Promise.all(items.map(lookupPlaylistOwner));
+
+
+                // Convert to Playlist class
+                items = items.map(p => new Playlist(p));
+
+                // Add to results
+                playlists = playlists.concat(items);
+
+            } catch (err) {
+                console.error(`Error suggesting playlists for "${track.name}"\n`, err);
+                break;
+            }
+        }
+
+        console.log(`Found ${playlists.length} suitable playlists for "${track.name}" using ${apiCalls} Spotify API calls\n`);
+        return playlists;
     }
 
 }
