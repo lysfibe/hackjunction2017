@@ -1,5 +1,6 @@
 <% playlists.forEach(playlist => { %>
 <ul>
+	<button class="select-me-please-daddy" data-playlist-id="<%=playlist.id%>">Submit</button>
 	<% Object.getOwnPropertyNames(playlist).forEach(property => { %>
 	<li>
 		<strong><%= property %>: </strong>

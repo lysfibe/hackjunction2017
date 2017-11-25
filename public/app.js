@@ -82,4 +82,20 @@ $( document ).ready(function() {
     }, 100);
 
     $( '#get-started-btn' ).click(getStarted);
+
+    $('body').on('click', '.select-me-please-daddy', function(e) {
+        const playlistId = $(this).data('playlist-id')
+		const trackId = $( '.submissions__demo-input' ).val();
+        console.log(playlistId)
+
+        fetch('/api/demo', {
+            method: 'POST',
+            body: JSON.stringify({
+                playlistId,
+                trackId,
+            })
+        }).then(response => response.json())
+            .then(console.log)
+            .catch(console.error)
+    })
 }); 
