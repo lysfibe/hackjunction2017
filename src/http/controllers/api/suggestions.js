@@ -7,7 +7,7 @@ exports.trackById = async ctx => {
 }
 
 exports.create = async ctx => {
-	const { ...params } = ctx.request.body
+	const params = ctx.request.body
 
 	const response = { foo: 123 } // await myCallForData()
 
