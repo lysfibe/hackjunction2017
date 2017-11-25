@@ -5,7 +5,7 @@ const views = require('koa-views');
 const pathUtil = require('path')
 
 // Must be used before any router is used
-app.use(views(pathUtil.join(__dirname , '/views'), {
+app.use(views(pathUtil.join(__dirname , 'views'), {
 	map: {
 		html: 'ejs',
 	},
@@ -20,6 +20,7 @@ app.use(views(pathUtil.join(__dirname , '/views'), {
 	}
 }))
 
+app.serve("/", pathUtil.join(__dirname, 'public'))
 
 app.routes(require('./src/http'))
 
