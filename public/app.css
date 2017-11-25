@@ -17,7 +17,7 @@
 
 body
 {
-    background-color: black;
+    background-color: #000;
 }
 
 h1, h2, h3, p, a, li, span, button, input
@@ -33,6 +33,7 @@ h1, h2 h3
 h1
 {
     font-size: 48px;
+    letter-spacing: 1px;
 }
 
 h2
@@ -47,12 +48,39 @@ button
     font-weight: 600;
     padding: 18px 48px 16px;
     border-radius: 500px;
-    box-shadow: rgb(97, 100, 103) 0px 0px 0px 2px inset;
+    border: 2px solid #919496;
+    color: #919496;
+    outline: none;
+}
+
+button:focus
+{
+    outline: none;
+}
+
+button:hover
+{
+    background-color: #919496;
+    color: #FFF;
+}
+
+button.button--white-fill
+{
+    background-color: #DDD;
+    border: 2px solid #DDD;
+    color: #000;
+}
+
+button.button--white-fill:hover
+{
+    background-color: #FFF;
+    border: 2px solid #FFF;
+    color: #000; 
 }
 
 small
 {
-    font-size: 10px;
+    font-size: 12px;
 }
 
 .headline-text
@@ -80,6 +108,29 @@ small
     width: 100vw;
     height: 100vh;
     box-sizing: border-box;
+    display: none;
+}
+
+.large-text
+{
+    font-size: 18px;
+}
+
+.content
+{
+    height: calc(100vh - 32px);
+}
+
+.footer
+{
+    background-color: #000;
+    padding: 10px 0;
+    text-align: center;
+}
+
+.footer small
+{
+    color: #FFF;
 }
 
 /* Navigation */
@@ -100,6 +151,30 @@ small
     color: #FFF;
     font-weight: 600;
     padding: 0 16px 0 16px;
+    position: relative;
+}
+
+.nav__link--active:before
+{
+    position: absolute;
+    display: table;
+    content: "";
+    bottom: -5px;
+    left: calc(50% - 10px);
+    right: 0;
+    width: 20px;
+    height: 2px;
+    background-color: #FFF;
+}
+
+.nav__link:hover
+{
+    color: #3ba585;
+}
+
+.nav__link:hover:before
+{
+    background-color: #3ba585;
 }
 
 /* Submissions Screen */
@@ -108,4 +183,76 @@ small
 {
     background-image: url('/images/submissions_bg.jpeg');
     background-size: cover;
+}
+
+.submissions-screen:before
+{
+    content: "";
+    display: table;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    height: 100%;
+    width: 100%;
+}
+
+.submissions-screen .content
+{
+    position: relative;
+    z-index: 10;
+}
+
+.submissions__demo-input
+{
+    font-size: 14px;
+    border: 2px solid #FFF;
+    padding: 25px 48px 23px;
+    border-radius: 500px;
+    background-color: transparent;
+    font-weight: 600;
+    width: 600px;
+    color: #FFF;
+}
+
+.submissions__demo-input:focus
+{
+    background-color: rgba(0, 0, 0, 0.2);
+    box-shadow: none;
+    border: 2px solid #FFF; 
+}
+
+.submissions__demo-submit
+{
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: none;
+}
+
+.submissions__demo-input-container
+{
+    position: relative;
+}
+
+.submissions__demo-input-container input,
+.submissions__demo-input-container button
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.submissions__demo-input-container button
+{
+    width: 200px;
+    transition: width 250ms ease-out, background-color 250ms ease-out;
+    display: none;
+}
+
+.submissions__demo-input-container input
+{
+    display: none;
 }
