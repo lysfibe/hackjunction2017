@@ -11,6 +11,8 @@ module.exports = function defineRoutes(router) {
 	router.get('/curate/:id', controller('curate', 'playlistById'))
 
 	router.group('/api', api => {
-		api.get('/suggestions/:trackId', controller('api/submission', 'trackById'))
+		api.get('/suggestions/:trackId', controller('api/suggestions', 'trackById'))
+		api.get('/suggestions', controller('api/suggestions', 'find'))
+		api.post('/suggestions', controller('api/suggestions', 'create'))
 	})
 }
