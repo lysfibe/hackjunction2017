@@ -9,3 +9,9 @@
 5. `cp .env.example .env`
 6. Fill in your details in the environment file
 7. `npm run dev`
+
+## Accessing services
+
+You can either require them normally, _or_, access them anywhere in your code
+with `service.[servicename]`, so e.g. `service.cache.remember('my-key', () => 123)`
+to use the cache's remember feature
