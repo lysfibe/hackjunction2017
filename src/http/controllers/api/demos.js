@@ -4,12 +4,9 @@ exports.create = async ctx => {
 
 	if (trackID != null) {
 		const suggest = require('../../../services/suggest')
-		const suggestedPlaylists = await suggest.suggestPlaylistsForTrack(trackID)
+		const { recommendedPlaylists } = await suggest.suggestPlaylistsForTrack(trackID)
 
-		const text = await service.snippet('partials/demo-list.ejs', { playlists: suggestedPlaylists })
-		// pass the data into a template
-		// and in the template, loop through the playlists
-		// and just <ul><li><strong>Key:</strong></li><li>Value</li></ul>
+		const text = await service.snippet('partials/demo-list.ejs', { playlists: recommendedPlaylists })
 
 		ctx.type = 'text/html'
 		ctx.body = text
