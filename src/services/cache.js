@@ -1,4 +1,5 @@
 const redis = require('redis')
+const moment = require('moment')
 
 class Cache {
 	static get Cache() { return Cache }
@@ -39,7 +40,32 @@ class Cache {
 		return value
 	}
 
+	async rememberFor(key, time, fn) {
+		let now = moment()
+		let value = await this.get(key)
+		if (value == null) {
+			value = {
+				until: moment(now).add(time, 'minutes'),
+				data: await fn(),
+			}
 
+			await this.set(key, value)
+			return value.data
+		} else {
+			const { until, data } = value
+			if (moment(until).isSameOrBefore(now)) {
+				value = {
+					until: moment(now).add(time, 'minutes'),
+					data: await fn()
+				}
+
+				await this.set(key, value)
+				return value.data
+			} else {
+				return data
+			}
+		}
+	}
 }
 
 module.exports = new Cache()
