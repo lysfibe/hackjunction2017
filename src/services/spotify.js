@@ -17,6 +17,23 @@ class Spotify {
 	async getUserPlaylists(id) {
 		return this._request(`users/${id}/playlists`)
 	}
+
+	async getArtist(id) {
+		return this._request(`artists/${id}`)
+	}
+
+	async getTrack(id) {
+		return this._request(`tracks/${id}`)
+	}
+
+	async getTracks(ids) {
+		if (!Array.isArray(ids)) throw 'getTracks requires an array of ids'
+		return this._request(`search`, 'GET', { qs: { ids } })
+	}
+
+	async search(qs) {
+		return this._request(`search`, 'GET', { qs })
+	}
 }
 
 module.exports = new Spotify()
