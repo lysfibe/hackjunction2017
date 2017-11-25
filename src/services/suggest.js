@@ -13,9 +13,9 @@ class Suggest {
 
         const artist = await spotify.getArtist(artistID);
 
-        const playlists = await this._searchAndRefine(track, artist);
+        const playlists = await Suggest._searchAndRefine(track, artist);
 
-        return this._formatResponse(track, artist, playlists);
+        return Suggest._formatResponse(track, artist, playlists);
     }
 
     /**
@@ -78,7 +78,7 @@ class Suggest {
         if (!track) throw 'Track is required for playlist recommendation';
         if (!artist) throw 'Artist is required for playlist recommendation';
 
-        let playlists = await this._searchForPlaylists(track, artist);
+        let playlists = await Suggest._searchForPlaylists(track, artist);
 
         // TODO Refine results
 
