@@ -102,7 +102,13 @@ class Suggest {
             limit: 50
         });
 
-        return response.playlists.items;
+        let playlists = response.playlists.items;
+
+        // Get full playlist objects
+        const lookup = p => spotify.getPlaylist(p.owner.id, p.id);
+        playlists = playlists.map(lookup);
+
+        return Promise.all(playlists);
     }
 
 }

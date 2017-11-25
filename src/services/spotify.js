@@ -42,6 +42,10 @@ class Spotify {
 		})
 	}
 
+	async getPlaylist(userID, playlistID) {
+		return this._request(`users/${userID}/playlists/${playlistID}`)
+	}
+
 	async getUserPlaylists(id) {
 		return this._request(`users/${id}/playlists`)
 	}
