@@ -204,3 +204,55 @@ small
     position: relative;
     z-index: 10;
 }
+
+.submissions__demo-input
+{
+    font-size: 14px;
+    border: 2px solid #FFF;
+    padding: 25px 48px 23px;
+    border-radius: 500px;
+    background-color: transparent;
+    font-weight: 600;
+    width: 600px;
+    color: #FFF;
+}
+
+.submissions__demo-input:focus
+{
+    background-color: rgba(0, 0, 0, 0.2);
+    box-shadow: none;
+    border: 2px solid #FFF; 
+}
+
+.submissions__demo-submit
+{
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: none;
+}
+
+.submissions__demo-input-container
+{
+    position: relative;
+}
+
+.submissions__demo-input-container input,
+.submissions__demo-input-container button
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.submissions__demo-input-container button
+{
+    width: 200px;
+    transition: width 250ms ease-out, background-color 250ms ease-out;
+    display: none;
+}
+
+.submissions__demo-input-container input
+{
+    display: none;
+}
