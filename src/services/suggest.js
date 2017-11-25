@@ -2,7 +2,7 @@ const spotify = require('./spotify')
 
 class Suggest {
 
-    async suggestPlaylistsForTrack(trackID) {
+    static async suggestPlaylistsForTrack(trackID) {
 
         const track = await spotify.getTrack(trackID);
 
@@ -13,16 +13,16 @@ class Suggest {
 
         const artist = await spotify.getArtist(artistID);
 
-        const playlists = await _searchAndRefine(track, artist);
+        const playlists = await this._searchAndRefine(track, artist);
 
-        return _formatResponse(track, artist, playlists);
+        return this._formatResponse(track, artist, playlists);
     }
 
     /**
      * Converts Spotify track, artist, and (an array of) playlist formats 
      * to a suggestion resource.
      */
-    async _formatResponse(track, artist, playlists) {
+    static async _formatResponse(track, artist, playlists) {
         return {
             // TODO reasons
             track: {
@@ -37,19 +37,19 @@ class Suggest {
                     name: artist.name
                 }
             },
-            recommendedPlaylists: playlists.map(_formatPlaylist)
+            recommendedPlaylists: playlists.map(this._formatPlaylist)
         }
     }
 
     /**
      * Converts Spotify's playlist format to our simplified format.
      */
-    async _formatPlaylist(p) {
+    static async _formatPlaylist(p) {
 
         const hasImage = Array.isArray(p.images) && p.images.length;
         const image = hasImage ? p.images[0].url : undefined;
 
-        const dateEdited; // TODO - maybe get from last added track?
+        const dateEdited = undefined; // TODO - maybe get from last added track?
 
         return {
             id: p.id,
@@ -67,9 +67,11 @@ class Suggest {
      * Returns an ordered array of playlists suitable for 
      * inclusion of track created by artist.
      */
-    async _searchAndRefine(track, artist) {
+    static async _searchAndRefine(track, artist) {
         // TODO
         return [];
     }
 
 }
+
+module.exports = Suggest;
