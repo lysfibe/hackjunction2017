@@ -2,30 +2,32 @@
 class Playlist {
 
     constructor(par) {
-        // Preserve Spotify data
+
+        // Preserve Spotify data as 'source' property
         this.source = par;
 
-        // Copy fields directly
+        // Simple fields
         this.id = par.id;
         this.href = par.href;
         this.name = par.name;
         this.description = par.description;
+        this.followerCount = par.followers.total;
+        this.trackCount = par.tracks.total;
 
-        // Counts
-        this.followerCount = par.followers ? par.followers.total : 0;
-        this.trackCount = par.tracks ? par.tracks.total : 0;
+        // Date of most recent addition
+        const additionDates = par.tracks.items.map(t => new Date(t.added_at));
+        this.dateEdited = new Date(Math.max.apply(null, additionDates));
 
         // Playlist image
         const hasImage = Array.isArray(par.images) && par.images.length;
         if (hasImage) this.image = par.images[0].url;
 
         // Curator image
-        const hasCuratorImage = Array.isArray(par.owner.images) && par.owner.images.length;
         let curatorImage;
+        const hasCuratorImage = Array.isArray(par.owner.images) && par.owner.images.length;
         if (hasCuratorImage) curatorImage = par.owner.images[0].url;
 
-        //this.dateEdited = undefined; // TODO - maybe get from last added track?
-
+        // Curator details
         this.curator = {
             id: par.owner.id,
             href: par.owner.href,
@@ -37,26 +39,27 @@ class Playlist {
         }
     }
 
-    get getRecentRating(){
-      return 3;
+    get getRecentRating() {
+        return 3;
     }
 
-    get getPlaylistLength(){
-      return 3;
-    }
-
-    get getPopularityRating(){
-      return 3;
-    }
-
-    get getCuratorFollowersCount(){
-      return 3;
+    get getPopularityRating() {
+        return 3;
     }
 
     get getCuratorPlaylistCount() {
-      return 3;
+        return 3;
     }
 
-  }
+    /**
+     * Returns a clone of the playlist without source information.
+     */
+    get simplified() {
+        const simplified = JSON.parse(JSON.stringify(this));
+        delete simplified.source;
+        return simplified;
+    }
+
+}
 
 module.exports = Playlist;

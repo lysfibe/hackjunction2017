@@ -45,24 +45,7 @@ class Suggest {
                     name: artist.name
                 }
             },
-            recommendedPlaylists: playlists.map(Suggest._formatPlaylist)
-        }
-    }
-
-    /**
-     * Converts a playlist to a lightweight format.
-     */
-    static _formatPlaylist(p) {
-        return {
-            id: p.id,
-            href: p.href,
-            name: p.name,
-            description: p.description,
-            image: p.image,
-            followerCount: p.followerCount,
-            trackCount: p.trackCount,
-            //dateEdited: p.dateEdited(),
-            curator: p.curator
+            recommendedPlaylists: playlists.map(p => p.simplified)
         }
     }
 
@@ -165,7 +148,7 @@ class Suggest {
                 playlists = playlists.concat(items);
 
             } catch (err) {
-                console.error(`Error suggesting playlists for "${track.name}"\n`, err);
+                console.error(`Error suggesting playlists for "${track.name}":\n`, err.error);
                 break;
             }
         }
