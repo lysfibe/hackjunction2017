@@ -74,24 +74,18 @@ class Suggest {
 
         let playlists = await Suggest._searchForPlaylists(track, artist);
 
-        // Refine results
-        playlists = playlists.filter(p => p.followerCount >= PLAYLIST_FOLLOWERS_MIN);
-
-        playlists = playlists.filter(p => p.trackCount >= PLAYLIST_TRACKS_MIN);
-
+        // TODO - Refine results
         // How recently music was added to the playlist 
         // How recent the music in the playlist is
         // Playlist length (saturation mitigation)
         // PlaylistObject.length() 
         // Genre relevance
         // Popularity of music in the list 
-
         // Curator followers
         // How recent curator activity was
         // Number of playlists curator has
 
         return playlists;
-
     }
 
     /**
@@ -111,10 +105,18 @@ class Suggest {
         });
 
         let playlists = response.playlists.items;
+        let apiCalls = playlists.length;
+
+        // Filter out short playlists
+        playlists = playlists.filter(p => p.tracks.total >= PLAYLIST_TRACKS_MIN);
 
         // Get full playlist details
         const lookupPlaylist = p => spotify.getPlaylist(p.owner.id, p.id);
         playlists = await Promise.all(playlists.map(lookupPlaylist));
+        apiCalls += playlists.length;
+
+        // Filter out insignificant playlists
+        playlists = playlists.filter(p => p.followers.total >= PLAYLIST_FOLLOWERS_MIN);
 
         // Get full owner details
         const lookupOwner = async p => {
@@ -122,7 +124,9 @@ class Suggest {
             return p;
         };
         playlists = await Promise.all(playlists.map(lookupOwner));
+        apiCalls += playlists.length;
 
+        console.log(`Found ${playlists.length} suitable playlists using ${apiCalls} API calls`);
         return playlists.map(p => new Playlist(p));
     }
 
