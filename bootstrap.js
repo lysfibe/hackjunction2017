@@ -13,5 +13,9 @@ global.service = {
 
 	get spotify() {
 		return require('./src/services/spotify')
+	},
+
+	get database() {
+		return require('./src/services/database')
 	}
 }
