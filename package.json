@@ -26,6 +26,7 @@
   "koa-views": "^6.1.2",
   "moment": "^2.19.2",
   "redis": "^2.8.0",
+  "request": "^2.83.0",
   "request-promise": "^4.2.2"
  },
  "devDependencies": {
