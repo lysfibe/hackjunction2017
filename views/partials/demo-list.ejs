@@ -1,0 +1,10 @@
+<% playlists.forEach(playlist => { %>
+<ul>
+	<% Object.getOwnPropertyNames(playlist).forEach(property => { %>
+	<li>
+		<strong><%= property %>: </strong>
+		<span><%= playlist[property] %></span>
+	</li>
+	<% }) %>
+</ul>
+<% }) %>
