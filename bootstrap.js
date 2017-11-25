@@ -10,4 +10,8 @@ global.service = {
 	get cache() {
 		return require('./src/services/cache')
 	},
+
+	get spotify() {
+		return require('./src/services/spotify')
+	}
 }
