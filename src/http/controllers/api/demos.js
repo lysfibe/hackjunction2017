@@ -1,9 +1,16 @@
 exports.create = async ctx => {
 	const params = ctx.request.body
+	const trackID = params.trackID
 
-	const response = { foo: 123 } // await myCallForData()
+	if (trackID != null) {
+		const suggest = require('../../../services/suggest')
+		const suggestedPlaylists = suggest.suggestPlaylistsForTrack(trackID)
 
-	ctx.body = response
+		ctx.body = suggestedPlaylists
+	} else {
+		ctx.status(422)
+		ctx.body = 'missing data'
+	}
 }
 
 exports.find = async ctx => {

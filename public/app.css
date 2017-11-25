@@ -224,17 +224,10 @@ small
     border: 2px solid #FFF; 
 }
 
-.submissions__demo-submit
-{
-    position: absolute;
-    top: 0;
-    right: 0;
-    display: none;
-}
-
 .submissions__demo-input-container
 {
     position: relative;
+    margin-top: 40px;
 }
 
 .submissions__demo-input-container input,
@@ -249,10 +242,30 @@ small
 {
     width: 200px;
     transition: width 250ms ease-out, background-color 250ms ease-out;
-    display: none;
 }
 
 .submissions__demo-input-container input
 {
     display: none;
+}
+
+.submissions__demo-input-container button.submissions__demo-submit
+{
+    position: absolute;
+    display: none;
+    height: 36px;
+    width: 36px;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font-size: 36px;
+    color: #919496;
+    top: 7px;
+    left: 557px;
+}
+
+.submissions__demo-input-container button.submissions__demo-submit:hover
+{
+    color: #FFF;
+    background-color: transparent;
 }
