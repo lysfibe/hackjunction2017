@@ -16,14 +16,14 @@ class Cache {
 		return new Promise((resolve, reject) => {
 			this.client.get(this._createKey(key), (err, value) => {
 				if (err) reject(err)
-				else resolve(value || null)
+				else resolve(value ? JSON.parse(value) : null)
 			})
 		})
 	}
 
 	async set(key, value) {
 		return new Promise((resolve, reject) => {
-			this.client.set(this._createKey(key), value, (err) => {
+			this.client.set(this._createKey(key), JSON.stringify(value), (err) => {
 				if (err) reject(err)
 				else resolve(true)
 			})
@@ -34,8 +34,12 @@ class Cache {
 		let value = await this.get(key)
 		if (value == null) {
 			value = await fn()
-			await this.set(key, JSON.stringify(value))
+			await this.set(key, value)
 		}
 		return value
 	}
+
+
 }
+
+module.exports = new Cache()
