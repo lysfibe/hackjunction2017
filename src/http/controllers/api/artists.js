@@ -1,7 +1,9 @@
+const spotify = require('../../../services/spotify')
+
 exports.findById = async ctx => {
 	const { artistId } = ctx.params
 
-	const request = { artistId }
-
-	ctx.body = request
+	const response = await spotify.getArtist(artistId)
+	
+	ctx.body = response
 }
