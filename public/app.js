@@ -1,7 +1,9 @@
 $( document ).foundation()
 
 $( document ).ready(function() {
-    
+
+    window.audioPreviews = {}
+
     /**
      * 
      * @param {string} trackURL
@@ -102,5 +104,13 @@ $( document ).ready(function() {
         }).then(response => response.json())
             .then(console.log)
             .catch(console.error)
+    })
+
+    $('body').on('click', '.track-preview', function(e) {
+        const url = $(this).data('preview-url')
+        const audio = new Audio(url)
+
+        window.audioPreviews[url] = audio
+        audio.play()
     })
 }); 
