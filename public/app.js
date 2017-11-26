@@ -16,21 +16,25 @@ $( document ).ready(function() {
             method: 'GET',
             url: '/api/tracks/' + trackID + '/recommendations',
             success: function(res) {
-                // res = html of playlist suggestions, chuck them into the dom
-                $( '.playlist-suggestions' ).html(res);
-                // render the recent activity times
-                var timesToConvert = document.querySelectorAll('.convert-time');
+                if (res.trim() == '') {
+                    $( '.playlist-suggestions' ).html('<p class="white-text" style="text-align:center; margin-top:10px;">:( Oh Boo!<br>We couldn\'t find any matches.</p>');
+                } else {
+                    // res = html of playlist suggestions, chuck them into the dom
+                    $( '.playlist-suggestions' ).html(res);
+                    // render the recent activity times
+                    var timesToConvert = document.querySelectorAll('.convert-time');
 
-                timesToConvert.forEach(function(timeToConvert) {
-                    console.log(timeToConvert);
-                    console.log('converting time:' + timeToConvert.dataset.datetime);
-                    var time = Date.parse(timeToConvert.dataset.datetime);
-                    console.log('converted time : ' + time);
-                    timeToConvert.innerText = timeago().format(Date.parse(timeToConvert.dataset.datetime));
-                }, this);
-
+                    timesToConvert.forEach(function(timeToConvert) {
+                        console.log(timeToConvert);
+                        console.log('converting time:' + timeToConvert.dataset.datetime);
+                        var time = Date.parse(timeToConvert.dataset.datetime);
+                        console.log('converted time : ' + time);
+                        timeToConvert.innerText = timeago().format(Date.parse(timeToConvert.dataset.datetime));
+                    }, this);
+                }
                 // fade out the previous screen
                 $( '.interstitial-screen' ).fadeOut();
+
                 // fade in the playlist suggestions screen
                 setTimeout(function() {
                     $( '.suggestions-screen' ).fadeIn();
@@ -47,7 +51,7 @@ $( document ).ready(function() {
                 }, 500);
             },
             error: function(err) {
-                console.log(err);
+                $( '.playlist-suggestions' ).html('<p class="white-text" style="text-align:center; margin-top:10px;">:( Oh Boo!<br>We couldn\'t find any matches.</p>');
             }
         });
 
