@@ -462,6 +462,11 @@ button.playlist-suggestion__show-more-info-button i
 
 }
 
+.playlist-suggestion__reason-label {
+    margin-bottom: 8px;
+    /*border-radius: 10px;*/
+}
+
 .playlist-suggestion__reasons-container strong
 {
     color: #FFF;
