@@ -1,81 +1,94 @@
 <!DOCTPYE html>
 
+
 <html>
 	<head>
 		<%- include partials/head.ejs %>
-		<style>
-			body {
-				color: white;
-			}
-			.track-content {
-				display: flex;
-				flex-direction: column;
-			}
-			.track-tags {
-				margin-top: auto;
-			}
-			.thumbnail {
-				position: relative;
-			}
-			.play {
-				top: 0;
-				left: 0;
-				right: 0;
-				bottom: 0;
-				position: absolute;
-				opacity: 0;
-				transition: 0.2s opacity linear;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-			}
-
-			.play:hover {
-				opacity: 1;
-				background-color: rgba(0,0,0,0.3);
-			}
-
-			.media-duration {
-				color: #BBBBBB;
-				margin: 10px;
-			}
-
-			.flex {
-				display: flex;
-				align-items: center;
-			}
-
-			.track-artist {
-				font-style: italic;
-			}
-		</style>
 	</head>
-	<body>
-		<div>
-			<% tracks.forEach(data => { %>
-				<div>
-					<div class="media-object">
-						<div class="media-object-section">
-							<div class="thumbnail">
-								<img src="<%= data.track.image %>" width="120" height="120">
-								<div class="play track-preview" data-preview-url="<%= data.track.preview_url %>"><i class="fa fa-play fa-3x"></i></div>
-							</div>
-						</div>
-						<div class="media-object-section track-content">
-							<div class="flex">
-								<h4><%= data.track.name %></h4>
-								<span class="media-duration"><%= data.track.length %></span>
-							</div>
-							<span class="track-artist">By <%= data.track.artist.name %></span>
-							<div class="track-tags bottom">
-								<span class="label success">Great for Dancing</span>
-								<span class="label alert">Not very popular</span>
-							</div>
-						</div>
 
+	<style>
+		.track-content {
+			display: flex;
+			flex-direction: column;
+		}
+		.track-tags {
+			margin-top: auto;
+		}
+		.thumbnail {
+			position: relative;
+		}
+		.play {
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			position: absolute;
+			opacity: 0;
+			transition: 0.2s opacity linear;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.play:hover {
+			opacity: 1;
+			background-color: rgba(0,0,0,0.3);
+		}
+
+		.media-duration {
+			color: #BBBBBB;
+			margin: 10px;
+		}
+
+		.flex {
+			display: flex;
+			align-items: center;
+		}
+
+		.track-artist {
+			font-style: italic;
+		}
+	</style>
+	<body>
+		<div class="full-screen curate-screen">
+			<div class="content">
+				<%- include partials/navigation.ejs %>
+				<div class="grid-x grid-padding-x">
+					<div class="cell large-offset-1 large-5">
+						<h1 class="white-text headline-text">Curate Your Playlist</h1>
+						<p class="white-text large-text">Some information!</p>
+					</div>
+					<div class="cell large-5 playlist-suggestions curator-suggestions">
+						<% tracks.forEach(data => { %>
+							<div class="playlist-suggestion curator-suggestion grid-x">
+								<div class="cell playlist-suggestion__thumbnail-container">
+									<img src="<%= data.track.image %>">
+									<div class="play track-preview" data-preview-url="<%= data.track.preview_url %>"><i class="fa fa-play fa-3x"></i></div>
+								</div>
+								<div class="auto cell playlist-suggestion__info-container">
+									<h3 class="playlist-suggestion-info__playlist-name">
+										<a href="<%= data.track.href %>" target="_blank"><%= data.track.name %></a>
+									</h3>
+									<p class="playlist-suggestion-info__curator-name">
+										<span class="dimmed-text">by <a target="_blank" href="<%= data.track.artist.href %>"><%= data.track.artist.name %></a>
+									</p>
+									<div class="grid-x">
+										<div class="cell large-4">
+											<span class="dimmed-text uppercase playlist-suggestion-info__stat">? followers</span>
+										</div>
+										<div class="cell large-4">
+											<span class="dimmed-text uppercase playlist-suggestion-info__stat">? listens</span>
+										</div>
+									</div>
+								</div>
+							</div>	
+						<% }) %>
 					</div>
 				</div>
-			<% }) %>
+			</div>
+			<footer class="footer">
+				<small>©LysFibe for HackJunction 2017</small>
+			</footer>
 		</div>
 	</body>
 </html>

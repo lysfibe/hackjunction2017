@@ -196,8 +196,15 @@ small
     background-size: cover;
 }
 
+.curate-screen
+{
+    background-image: url('/images/curate_bg.jpeg');
+    background-size: cover;
+}
+
 .submissions-screen:before,
-.suggestions-screen:before
+.suggestions-screen:before,
+.curate-screen:before
 {
     content: "";
     display: table;
@@ -212,7 +219,8 @@ small
 }
 
 .submissions-screen .content,
-.suggestions-screen .content
+.suggestions-screen .content,
+.curate-screen .content
 {
     position: relative;
     z-index: 10;
@@ -463,4 +471,16 @@ button.playlist-suggestion__show-more-info-button i
 {
     border-top: 1px solid #919496;
     padding-top: 10px;
-}   
+}  
+
+/* Curator Screen */
+
+.curator-suggestions
+{
+
+}
+
+.curator-suggestion
+{
+    background-color: rgba(255, 255, 255, 0.1);
+}
