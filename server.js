@@ -15,7 +15,7 @@ app.use(views(pathUtil.join(__dirname , 'views'), {
 		},
 
 		partials: {
-			subTitle: './partials/my-partial' // requires ./partials/my-partial.ejs
+			// subTitle: './partials/my-partial' // requires ./partials/my-partial.ejs
 		}
 	}
 }))
