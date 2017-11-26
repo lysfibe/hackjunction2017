@@ -190,7 +190,14 @@ small
     background-size: cover;
 }
 
-.submissions-screen:before
+.suggestions-screen
+{
+    background-image: url('/images/submissions_bg2.jpeg');
+    background-size: cover;
+}
+
+.submissions-screen:before,
+.suggestions-screen:before
 {
     content: "";
     display: table;
@@ -204,7 +211,8 @@ small
     width: 100%;
 }
 
-.submissions-screen .content
+.submissions-screen .content,
+.suggestions-screen .content
 {
     position: relative;
     z-index: 10;
@@ -293,14 +301,13 @@ small
 {
     height: calc(100% - 105px);
     overflow: scroll;
-    box-shadow: inset 0 -50px 30px -10px #000;
 }
 
 .playlist-suggestion
 {
     width: 100%;
     margin-bottom: 5px;
-    background-color: rgba(255, 255, 255, 0.125);
+    background-color: rgba(0, 0, 0, 0.8);
     color: white;
     position: relative;
 }
