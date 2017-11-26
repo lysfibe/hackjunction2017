@@ -1,11 +1,28 @@
 <% playlists.forEach(playlist => { %>
-<ul>
-	<button class="select-me-please-daddy" data-playlist-id="<%=playlist.id%>" data-curator-id="<%=playlist.curator.id%>">Submit</button>
-	<% Object.getOwnPropertyNames(playlist).forEach(property => { %>
-	<li>
-		<strong><%= property %>: </strong>
-		<span><%= playlist[property] %></span>
-	</li>
-	<% }) %>
-</ul>
+<div class="playlist-suggestion grid-x" data-playlist-id="<%= playlist.id %>">
+	<div class="cell playlist-suggestion__thumbnail-container">
+		<img src="<%= playlist.image %>">
+	</div>
+	<div class="auto cell playlist-suggestion__info-container">
+		<h3 class="playlist-suggestion-info__playlist-name">
+			<a target="_blank" href="<%= playlist.href %>"><%= playlist.name %></a>
+		</h3>
+		<p class="playlist-suggestion-info__curator-name">
+			<span class="dimmed-text">by <a target="_blank" href="<%= playlist.curator.href %>"><%= playlist.curator.name %></a> &#8729; </span>
+			<span class="dimmed-text uppercase playlist-suggestion-info__stat">Last edited <span class="convert-time" data-datetime="<%= playlist.dateEdited %>"></span></span>
+		</p>
+		<div class="grid-x">
+			<div class="cell large-4">
+				<span class="dimmed-text uppercase playlist-suggestion-info__stat"><%= playlist.followerCount %> followers</span>
+			</div>
+			<div class="cell large-4">
+				<span class="dimmed-text uppercase playlist-suggestion-info__stat"><%= playlist.trackCount %> songs</span>
+			</div>
+		</div>
+		<button class="playlist-suggestion__show-more-info-button" data-playlist-id="<%= playlist.id %>"><i class="fa fa-angle-down" aria-hidden="true"></i></button>
+	</div>
+	<div class="cell large-12 grid-x playlist-suggestion__more-info-container" data-playlist-id="<%= playlist.id %>">
+		<button class="select-me-please-daddy" data-playlist-id="<%= playlist.id %>" data-curator-id="<%= playlist.curator.id %>">Submit</button>
+	</div>
+</div>
 <% }) %>

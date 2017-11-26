@@ -133,6 +133,11 @@ small
     color: #FFF;
 }
 
+.uppercase
+{
+    text-transform: uppercase;
+}
+
 /* Navigation */
 
 .nav
@@ -185,7 +190,14 @@ small
     background-size: cover;
 }
 
-.submissions-screen:before
+.suggestions-screen
+{
+    background-image: url('/images/submissions_bg2.jpeg');
+    background-size: cover;
+}
+
+.submissions-screen:before,
+.suggestions-screen:before
 {
     content: "";
     display: table;
@@ -199,7 +211,8 @@ small
     width: 100%;
 }
 
-.submissions-screen .content
+.submissions-screen .content,
+.suggestions-screen .content
 {
     position: relative;
     z-index: 10;
@@ -287,6 +300,108 @@ small
 .playlist-suggestions
 {
     height: calc(100% - 105px);
-    background-color: red;
     overflow: scroll;
+}
+
+.playlist-suggestion
+{
+    width: 100%;
+    margin-bottom: 5px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    position: relative;
+}
+
+.playlist-suggestion__thumbnail-container
+{
+    width: 100px;
+    height: 100px;
+    padding-left: 0!important;
+    position: relative;
+}
+
+.playlist-suggestion__thumbnail-container img
+{
+    position: absolute;
+    max-width: 80px;
+    max-height: 80px;
+    top: 10px;
+    left: 10px;
+}
+
+.playlist-suggestion__info-container
+{
+    padding: 10px 10px 10px 0;
+    position: relative;
+}
+
+.playlist-suggestion-info__playlist-name
+{
+    max-height: 25px;
+    max-width: calc(100% - 50px);
+    overflow: hidden;
+    margin-bottom: 0;
+}
+
+.playlist-suggestion-info__playlist-name a
+{
+    font-weight: 600;
+    color: #FFF;
+    font-size: 18px;
+    border-bottom: 2px solid transparent;
+}
+
+.playlist-suggestion-info__playlist-name a:hover
+{
+    border-bottom: 2px solid #FFF;
+}
+
+.playlist-suggestion-info__curator-name
+{
+    
+}
+
+.playlist-suggestion-info__curator-name a
+{
+    font-size: 14px;
+    color: #919496;
+    border-bottom: 2px solid transparent;
+}
+
+.playlist-suggestion-info__curator-name a:hover
+{
+    border-bottom: 2px solid #919496;
+}
+
+.playlist-suggestion__more-info-container
+{
+    max-height: 0;
+    transition: max-height 500ms ease-out;
+    overflow: hidden;
+    padding: 0 10px;
+}
+
+button.playlist-suggestion__show-more-info-button
+{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: transparent;
+    height: auto;
+    width: auto;
+    border: none;
+    color: #FFF;
+    margin: 0;
+    padding: 0;
+    font-size: 18px;
+}
+
+button.playlist-suggestion__show-more-info-button i
+{
+    color: #FFF;
+}
+
+.playlist-suggestion-info__stat
+{
+    font-size: 12px;
 }
