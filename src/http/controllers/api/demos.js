@@ -6,6 +6,9 @@ exports.recommend = async ctx => {
 		const suggest = require('../../../services/suggest')
 		const { recommendedPlaylists } = await suggest.suggestPlaylistsForTrack(trackID)
 
+
+		console.log(recommendedPlaylists)
+		
 		const text = await service.snippet('partials/demo-list.ejs', { playlists: recommendedPlaylists })
 
 		ctx.type = 'text/html'
