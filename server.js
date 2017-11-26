@@ -23,6 +23,11 @@ app.use(views(pathUtil.join(__dirname , 'views'), {
 app.serve("/", pathUtil.join(__dirname, 'public'))
 
 app.body();
+app.use((ctx, next) => {
+	// This bug again :eye_roll_emoji:
+	ctx.body = ctx.request.body
+	return next()
+})
 
 app.routes(require('./src/http'))
 
