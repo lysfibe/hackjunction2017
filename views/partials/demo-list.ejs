@@ -22,7 +22,16 @@
 		<button class="playlist-suggestion__show-more-info-button" data-playlist-id="<%= playlist.id %>"><i class="fa fa-angle-down" aria-hidden="true"></i></button>
 	</div>
 	<div class="cell large-12 grid-x playlist-suggestion__more-info-container" data-playlist-id="<%= playlist.id %>">
-		<button class="select-me-please-daddy" data-playlist-id="<%= playlist.id %>" data-curator-id="<%= playlist.curator.id %>">Submit</button>
+		<div class="cell large-12 playlist-suggestion__description-container">
+			<p><%= playlist.description %></p>
+		</div>
+		<div class="cell large-12 playlist-suggestion__reasons-container">
+			<p><strong>Recommended for you because:</strong></p>
+			<span class="playlist-suggestion__reason-tag">Similar time signature</span>
+		</div>
+		<div class="cell large-12 playlist-suggestion__submit-container">
+			<button class="playlist-suggestion__submit select-me-please-daddy" data-playlist-id="<%= playlist.id %>" data-curator-id="<%= playlist.curator.id %>">Submit Track</button>
+		</div>
 	</div>
 </div>
 <% }) %>
