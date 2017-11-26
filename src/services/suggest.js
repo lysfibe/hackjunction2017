@@ -2,9 +2,9 @@ const spotify = require('./spotify');
 const Playlist = require('../domain/playlist');
 
 const PLAYLIST_FOLLOWERS_MIN = 100;
-const PLAYLIST_TRACKS_MIN = 10;
+const PLAYLIST_TRACKS_MIN = 5;
 const DESIRED_PLAYLISTS_FROM_SEARCH = 50;
-const MAX_API_CALLS_PER_REQUEST = 10;
+const MAX_API_CALLS_PER_REQUEST = 200;
 const DISALLOW_GENERATED_PLAYLISTS = true;
 
 class Suggest {
