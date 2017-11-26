@@ -39,7 +39,7 @@ $( document ).ready(function() {
                         var playlistId = $( this ).data('playlist-id') || $( this ).closest('button').data('playlist-id');
                         // show more info on the playlist
                         $( '.playlist-suggestion__more-info-container[data-playlist-id="' + playlistId + '"]' ).css({
-                            'max-height': '50px'
+                            'max-height': '500px'
                         });
                         // hide this button
                         $( this ).closest('button').hide();
@@ -89,7 +89,7 @@ $( document ).ready(function() {
                     e.preventDefault();
                     var trackURL = $( ".submissions__demo-input" ).val();
 
-                    var trackURL = 'https://open.spotify.com/track/2pxAohyJptQWTQ5ZRWYijN';
+                    // var trackURL = 'https://open.spotify.com/track/2pxAohyJptQWTQ5ZRWYijN';
 
                     if (trackURL != '') {
                         submitDemo(trackURL);

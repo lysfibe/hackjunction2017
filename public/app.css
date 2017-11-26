@@ -405,3 +405,62 @@ button.playlist-suggestion__show-more-info-button i
 {
     font-size: 12px;
 }
+
+.playlist-suggestion__submit-container
+{
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.playlist-suggestion__submit
+{
+    /* font-size: 20px; */
+    padding: 9px 24px 8px;
+    background-color: transparent;
+    color: #3ba585;
+    border: 2px solid #3ba585;
+}
+
+.playlist-suggestion__submit:hover
+{
+    background-color: #3ba585;
+    color: #FFF;
+}
+
+.playlist-suggestion__more-info-container p,
+.playlist-suggestion__more-info-container span
+{
+    font-size: 14px;
+    color: #919496;
+}
+
+.playlist-suggestion__more-info-container 
+{
+     
+}
+
+.playlist-suggestion__reasons-container
+{
+    margin-bottom: 20px;
+}
+
+.playlist-suggestion__reasons-container p
+{
+    margin-bottom: 0;
+}
+
+.playlist-suggestion__reason-tag
+{
+
+}
+
+.playlist-suggestion__reasons-container strong
+{
+    color: #FFF;
+}
+
+.playlist-suggestion__description-container
+{
+    border-top: 1px solid #919496;
+    padding-top: 10px;
+}   
