@@ -76,7 +76,15 @@ class Suggest {
         // [x] How recent curator activity was
         // [ ] Number of playlists curator has
 
-        return playlists;
+        // TODO - Combine multiple scores using weights
+        playlists = playlists.map(p => {
+            p.score = p.featureScores.average;
+            return p;
+        });
+
+        // Sort by descending score
+        const srt = (a, b) => a.score > b.score ? -1 : 1;
+        return playlists.sort(srt);
     }
 
     /**
