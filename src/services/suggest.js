@@ -76,14 +76,18 @@ class Suggest {
         // [x] How recent curator activity was
         // [ ] Number of playlists curator has
 
-        // TODO - Combine multiple scores using weights
+        // Combine multiple scores using weights
         playlists = playlists.map(p => {
-            p.score = p.featureScores.average;
+            // Add scoring criteria here (name, value, weight)
+            p.addScore('features', p.featureScores.average);
+            p.addScore('popularity', p.followerRating);
+            p.addScore('activity', p.recentRating, 2);
+            p.addScore('prestige', p.curatorFollowerRating);
             return p;
         });
 
-        // Sort by descending score
-        const srt = (a, b) => a.score > b.score ? -1 : 1;
+        // Sort by weighted score (descending)
+        const srt = (a, b) => a.scores.weightedTotal > b.scores.weightedTotal ? -1 : 1;
         return playlists.sort(srt);
     }
 

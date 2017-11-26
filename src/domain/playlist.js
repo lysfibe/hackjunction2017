@@ -7,6 +7,9 @@ class Playlist {
         // Preserve Spotify data as 'source' property
         this.source = par;
 
+        // Defaults
+        this.scores = { total: 0, weightedTotal: 0 };
+
         // Simple fields
         this.id = par.id;
         this.href = par.href;
@@ -76,6 +79,15 @@ class Playlist {
     }
 
     /**
+     * Adds a new scoring criteria.
+     */
+    addScore(name, value = 0, weight = 1) {
+        this.scores[name] = value;
+        this.scores.total += value;
+        this.scores.weightedTotal += value * weight;
+    }
+
+    /**
      * Compares an audio feature value to the playlist statistics.
      * Greater difference implies a lower score.
      * Lower variance implies greater magnitude.
@@ -87,7 +99,10 @@ class Playlist {
         return score;
     }
 
-    get getRecentRating() {
+    /**
+     * Rating based on the time since a track was last added.
+     */
+    get recentRating() {
         const difference = parseInt((new Date() - this.dateEdited) / (1000 * 60 * 60 * 24));
         if (difference > 100) {
             return 0;
@@ -97,8 +112,20 @@ class Playlist {
         }
     }
 
-    get getPopularityRating() {
-        return 3;
+    /**
+     * Logarithmic score based on number of followers, capped at 100.
+     */
+    get followerRating() {
+        const value = Math.round(Math.sqrt(this.followerCount));
+        return value > 100 ? 100 : value;
+    }
+
+    /**
+     * Logarithmic score based on curator's number of followers, capped at 100.
+     */
+    get curatorFollowerRating() {
+        const value = Math.round(Math.sqrt(this.curator.followerCount));
+        return value > 100 ? 100 : value;
     }
 
     get getCuratorPlaylistCount() {
