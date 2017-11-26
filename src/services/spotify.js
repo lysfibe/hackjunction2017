@@ -4,21 +4,25 @@ class Spotify {
 	static get Spotify() { return Spotify }
 
 	async _request (uri, method = 'GET', opts = {}) {
-		const token = await this._auth()
+		const cacheKey = `${uri}//${method}//${JSON.stringify(opts)}`
 
-		const headers = opts.headers ?
-			Object.assign({ Authorization: `Bearer ${token}` }, opts.headers)
-			: { Authorization: `Bearer ${token}` }
+		return service.cache.rememberFor(cacheKey, 10, async () => {
+			const token = await this._auth()
 
-		const payload = Object.assign({
-			uri: `https://api.spotify.com/v1/${uri}`,
-			method,
-		}, opts, {
-			headers,
-			json: true,
+			const headers = opts.headers ?
+				Object.assign({ Authorization: `Bearer ${token}` }, opts.headers)
+				: { Authorization: `Bearer ${token}` }
+
+			const payload = Object.assign({
+				uri: `https://api.spotify.com/v1/${uri}`,
+				method,
+			}, opts, {
+				headers,
+				json: true,
+			})
+
+			return request(payload)
 		})
-
-		return request(payload)
 	}
 
 	async _auth() {

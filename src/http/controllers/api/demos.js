@@ -1,6 +1,6 @@
 exports.recommend = async ctx => {
-	const params = ctx.request.params
-	const { trackID } = params
+	const params = ctx.params
+	const trackID = params.trackId
 
 	if (trackID != null) {
 		const suggest = require('../../../services/suggest')
@@ -17,10 +17,44 @@ exports.recommend = async ctx => {
 }
 
 exports.create = async ctx => {
-	const { trackId, playlistId } = ctx.request.body
-	console.log(trackId, playlistId)
+	const errors = ctx.validate({
+		trackId: trackId => !!trackId ? null : 'Track ID must be present',
+		playlistId: playlistId => !! playlistId ? null : 'Playlist ID must be present',
+		curatorId: curatorId => !! curatorId ? null : 'Curator ID must be present',
+	})
+
+	if (errors) {
+		ctx.body = errors
+		ctx.status = 422
+		return
+	}
+
+	const { trackId, playlistId, curatorId } = ctx.request.body
+
+	console.log(trackId, playlistId, curatorId)
+
 	const track = await service.spotify.getTrack(trackId)
+
 	console.log(track)
+	if (track.artists.length > 0) {
+		const [ artist ] = track.artists
+		const re = await service.database.insert({
+			trackId,
+			playlistId,
+			curatorId,
+			artistId: artist.id,
+		})
+
+		console.log(re)
+
+		ctx.body = {
+			message: 'success',
+			ok: true,
+		}
+	} else {
+		ctx.status = 500
+		ctx.body = { message: 'OH DAMN SON', ok: false }
+	}
 	ctx.body = track
 }
 

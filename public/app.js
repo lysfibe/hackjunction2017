@@ -11,11 +11,8 @@ $( document ).ready(function() {
         var trackID = trackURL.split('/').pop();
         
         $.ajax({
-            method: 'POST',
-            url: '/api/demos',
-            data: {
-                trackID: trackID
-            },
+            method: 'GET',
+            url: '/api/tracks/' + trackID + '/recommendations',
             success: function(res) {
                 console.log(res);
 
@@ -85,4 +82,25 @@ $( document ).ready(function() {
     }, 100);
 
     $( '#get-started-btn' ).click(getStarted);
+
+    $('body').on('click', '.select-me-please-daddy', function(e) {
+        const playlistId = $(this).data('playlist-id')
+        const curatorId = $(this).data('curator-id')
+		const trackId = $( '.submissions__demo-input' ).val().split('/').pop();
+        console.log(playlistId)
+
+        fetch('/api/demos', {
+            method: 'POST',
+            body: JSON.stringify({
+                playlistId,
+                trackId,
+                curatorId,
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then(response => response.json())
+            .then(console.log)
+            .catch(console.error)
+    })
 }); 
