@@ -86,6 +86,13 @@ class Suggest {
             return p;
         };
 
+        const lookupTrackAnalysis = async p => {
+            const ids = p.tracks.items.map(t => t.track.id);
+            const response = await spotify.getFeaturesForTracks(ids);
+            p.tracks.features = response.audio_features;
+            // Note: This should probably merge by id with tracks.items
+        };
+
         // Note: Only artists have genres on Spotify
         const q = Array.isArray(artist.genres)
             ? artist.genres.join(' OR ')
@@ -139,6 +146,13 @@ class Suggest {
                 console.log(`Requesting curator details for "${track.name}"`);
                 apiCalls += items.length;
                 items = await Promise.all(items.map(lookupPlaylistOwner));
+
+
+                // REQUEST audio features for each track in the playlist
+                // Note: Playlist tracks are paginated, so some may be missing
+                console.log(`Requesting track audio features for "${track.name}"`);
+                apiCalls += items.length;
+                await Promise.all(items.map(lookupTrackAnalysis));
 
 
                 // Convert to Playlist class

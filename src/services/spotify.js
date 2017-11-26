@@ -68,7 +68,12 @@ class Spotify {
 
 	async getTracks(ids) {
 		if (!Array.isArray(ids)) throw 'getTracks requires an array of ids'
-		return this._request(`search`, 'GET', { qs: { ids } })
+		return this._request(`search`, 'GET', { qs: { ids: ids.join() } })
+	}
+
+	async getFeaturesForTracks(ids) {
+		if (!Array.isArray(ids)) throw 'getFeaturesForTracks requires an array of ids'
+		return this._request(`audio-features`, 'GET', { qs: { ids: ids.join() } })
 	}
 
 	async search(qs) {
