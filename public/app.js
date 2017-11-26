@@ -108,9 +108,18 @@ $( document ).ready(function() {
 
     $('body').on('click', '.track-preview', function(e) {
         const url = $(this).data('preview-url')
-        const audio = new Audio(url)
-
-        window.audioPreviews[url] = audio
-        audio.play()
+        console.log($(this).find('.fa'))
+        if (window.audioPreviews.hasOwnProperty(url)) {
+            window.audioPreviews[url].pause()
+            delete window.audioPreviews[url]
+            $(this).find('.fa').addClass('fa-play')
+            $(this).find('.fa').removeClass('fa-pause')
+        } else {
+            const audio = new Audio(url)
+            window.audioPreviews[url] = audio
+            audio.play()
+			$(this).find('.fa').removeClass('fa-play')
+			$(this).find('.fa').addClass('fa-pause')
+        }
     })
 }); 
