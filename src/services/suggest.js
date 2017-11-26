@@ -155,9 +155,6 @@ class Suggest {
                 await Promise.all(items.map(lookupTrackAnalysis));
 
 
-                // Convert to Playlist class
-                items = items.map(p => new Playlist(p));
-
                 // Add to results
                 playlists = playlists.concat(items);
 
@@ -168,7 +165,10 @@ class Suggest {
         }
 
         console.log(`Found ${playlists.length} suitable playlists for "${track.name}" using ${apiCalls} Spotify API calls\n`);
-        return playlists;
+
+        // Convert to Playlist class
+        console.log(`Processing playlist data for "${track.name}"`);
+        return playlists.map(p => new Playlist(p));
     }
 
 }
