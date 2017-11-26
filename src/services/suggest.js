@@ -83,6 +83,7 @@ class Suggest {
             p.addScore('features', p.featureScores.average, 3);
             p.addScore('popularity', p.followerRating, 2);
             p.addScore('prestige', p.curatorFollowerRating);
+            p.addScore('length', p.lengthRating);
             return p;
         });
 

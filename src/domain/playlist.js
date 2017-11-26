@@ -128,6 +128,19 @@ class Playlist {
         return value > 100 ? 100 : value;
     }
 
+    /**
+     * Logarithmic score based on playlist length.
+     * Playlists further from the desired length have a 
+     * logarithmically decreasing score, capped at 0.
+     */
+    get lengthRating() {
+        const desired = 30;
+        const diff = Math.abs(desired - this.trackCount);
+        const logDiff = Math.round(Math.sqrt(diff) * 5);
+        const value = 100 - logDiff;
+        return value < 0 ? 0 : value;
+    }
+
     get getCuratorPlaylistCount() {
         return 3;
     }
