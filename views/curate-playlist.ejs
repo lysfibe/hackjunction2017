@@ -71,16 +71,9 @@
 									<p class="playlist-suggestion-info__curator-name">
 										<span class="dimmed-text">by <a target="_blank" href="<%= data.track.artist.href %>"><%= data.track.artist.name %></a>
 									</p>
-									<div class="grid-x">
-										<div class="cell large-4">
-											<span class="dimmed-text uppercase playlist-suggestion-info__stat">? followers</span>
-										</div>
-										<div class="cell large-4">
-											<span class="dimmed-text uppercase playlist-suggestion-info__stat">? listens</span>
-										</div>
-									</div>
 								</div>
-							</div>	
+							</div>
+							<p> <%= JSON.stringify(data) %> </p>
 						<% }) %>
 					</div>
 				</div>
