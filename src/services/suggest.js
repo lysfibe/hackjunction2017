@@ -79,9 +79,9 @@ class Suggest {
         // Combine multiple scores using weights
         playlists = playlists.map(p => {
             // Add scoring criteria here (name, value, weight)
-            p.addScore('features', p.featureScores.average);
-            p.addScore('popularity', p.followerRating);
-            p.addScore('activity', p.recentRating, 2);
+            p.addScore('activity', p.recentRating, 4);
+            p.addScore('features', p.featureScores.average, 3);
+            p.addScore('popularity', p.followerRating, 2);
             p.addScore('prestige', p.curatorFollowerRating);
             return p;
         });
