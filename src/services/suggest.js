@@ -4,7 +4,7 @@ const Playlist = require('../domain/playlist');
 const PLAYLIST_FOLLOWERS_MIN = 100;
 const PLAYLIST_TRACKS_MIN = 10;
 const DESIRED_PLAYLISTS_FROM_SEARCH = 50;
-const MAX_API_CALLS_PER_REQUEST = 200;
+const MAX_API_CALLS_PER_REQUEST = 10;
 const DISALLOW_GENERATED_PLAYLISTS = true;
 
 class Suggest {
@@ -12,6 +12,8 @@ class Suggest {
     static async suggestPlaylistsForTrack(trackID) {
 
         const track = await spotify.getTrack(trackID);
+
+        track.features = await spotify.getFeaturesForTrack(trackID);
 
         if (!Array.isArray(track.artists)) throw 'No artists found for track';
 
@@ -49,6 +51,7 @@ class Suggest {
         }
     }
 
+
     /**
      * Returns an ordered array of playlists suitable for 
      * inclusion of track created by artist.
@@ -60,18 +63,28 @@ class Suggest {
 
         let playlists = await Suggest._searchForPlaylists(track, artist);
 
-        // TODO - Refine results
-        // How recently music was added to the playlist 
-        // How recent the music in the playlist is
-        // Playlist length (saturation mitigation)
-        // Genre relevance
-        // Popularity of music in the list 
-        // Diversity of artists
-        // Curator followers
-        // How recent curator activity was
-        // Number of playlists curator has
+        playlists = Suggest._calculateFeatureMatchScores(playlists, track);
 
-        return playlists;
+        // TODO - Refine results
+        // [x] How recently music was added to the playlist 
+        // [ ] How recent the music in the playlist is
+        // [ ] Playlist length (saturation mitigation)
+        // [~] Genre relevance
+        // [ ] Popularity of music in the list 
+        // [ ] Diversity of artists
+        // [ ] Curator followers
+        // [x] How recent curator activity was
+        // [ ] Number of playlists curator has
+
+        // TODO - Combine multiple scores using weights
+        playlists = playlists.map(p => {
+            p.score = p.featureScores.average;
+            return p;
+        });
+
+        // Sort by descending score
+        const srt = (a, b) => a.score > b.score ? -1 : 1;
+        return playlists.sort(srt);
     }
 
     /**
@@ -102,6 +115,7 @@ class Suggest {
         let offset = 0;
         let playlists = [];
 
+        console.log();
         while (playlists.length < DESIRED_PLAYLISTS_FROM_SEARCH
             && apiCalls < MAX_API_CALLS_PER_REQUEST) {
 
@@ -164,11 +178,94 @@ class Suggest {
             }
         }
 
-        console.log(`Found ${playlists.length} suitable playlists for "${track.name}" using ${apiCalls} Spotify API calls\n`);
+        console.log(`Found ${playlists.length} suitable playlists for "${track.name}" using ${apiCalls} Spotify API calls`);
 
         // Convert to Playlist class
         console.log(`Processing playlist data for "${track.name}"`);
         return playlists.map(p => new Playlist(p));
+    }
+
+
+
+    // FEATURE MATCHING --------------------------------------------------------
+
+    /**
+     * Returns an array of numbers ranged 0 to 100 representing the fitness 
+     * of the track to the playlist in regards to that feature.
+     * Fitness is defined by feature score which is inversely proportional 
+     * to the difference between the track's value and the playlist average, 
+     * and the variance of the playlist.
+     */
+    static _scaledFeatureMatchScore(feature, playlists, track) {
+
+        // Accumulate feature scores
+        let scores = [];
+        playlists.map(p => {
+            try {
+                scores.push(p.compareFeature(feature, track.features[feature]));
+            } catch (e) {
+                scores.push('Unknown');
+            }
+        });
+        // console.log(feature + ' (raw): ', scores);
+
+        // Scale features
+        const numbers = scores.filter(n => !isNaN(n));
+        const scoresMin = Math.min(...numbers);
+        const scoresMax = Math.max(...numbers);
+        const scoresDiff = (scoresMax - scoresMin);
+        scores = scores.map(n => {
+            if (!isNaN(n)) {
+                return Math.round(100 * (n - scoresMin) / scoresDiff)
+            } else {
+                return n;
+            }
+        });
+
+        //console.log(`Min ${scoresMin}, Max ${scoresMax}, Diff ${scoresDiff}`);
+        //console.log(feature + ' (scaled): ', scores);
+        return scores;
+    }
+
+    static _calculateFeatureMatchScores(playlists, track) {
+        const features = [
+            "danceability",
+            "energy",
+            "key",
+            "loudness",
+            "mode",
+            "speechiness",
+            "acousticness",
+            "instrumentalness",
+            "liveness",
+            "valence",
+            "tempo",
+            "duration_ms",
+            "time_signature"
+        ];
+
+        // Generate matrix of features by playlists
+        const mat = features.map(f => Suggest._scaledFeatureMatchScore(f, playlists, track));
+
+        // Tally
+        for (let i = 0; i < playlists.length; i++) {
+            const p = playlists[i];
+
+            p.featureScores = { total: 0 };
+
+            for (let j = 0; j < mat.length; j++) {
+                // Save score for feature
+                p.featureScores[features[j]] = mat[j][i];
+
+                // Add score to total
+                if (!isNaN(mat[j][i])) p.featureScores.total += mat[j][i];
+            };
+
+            // Calculate Average
+            p.featureScores.average = Math.round(p.featureScores.total / features.length);
+        }
+
+        return playlists;
     }
 
 }

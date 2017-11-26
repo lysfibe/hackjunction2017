@@ -71,17 +71,29 @@ class Playlist {
             }
         }
         catch (err) {
-            console.error('Failed to calculate audio features for playlist');
+            console.error(`Failed to calculate audio features for playlist "${this.name}"`);
         }
+    }
+
+    /**
+     * Compares an audio feature value to the playlist statistics.
+     * Greater difference implies a lower score.
+     * Lower variance implies greater magnitude.
+     */
+    compareFeature(feature, value) {
+        const pl = this.features[feature]
+        const score = 0 - (Math.abs(pl.mean - value) / pl.variance);
+        //console.log(`${feature}: ${score}, Value ${value}, Mean ${pl.mean}, Variance ${pl.variance}`);
+        return score;
     }
 
     get getRecentRating() {
         const difference = parseInt((new Date() - this.dateEdited) / (1000 * 60 * 60 * 24));
         if (difference > 100) {
-          return 0;
+            return 0;
         }
         else {
-          return 100 - difference;
+            return 100 - difference;
         }
     }
 
@@ -99,6 +111,7 @@ class Playlist {
     get simplified() {
         const simplified = JSON.parse(JSON.stringify(this));
         delete simplified.source;
+        delete simplified.features;
         return simplified;
     }
 

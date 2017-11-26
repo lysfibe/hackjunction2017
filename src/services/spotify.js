@@ -3,7 +3,7 @@ const request = require('request-promise')
 class Spotify {
 	static get Spotify() { return Spotify }
 
-	async _request (uri, method = 'GET', opts = {}) {
+	async _request(uri, method = 'GET', opts = {}) {
 		const cacheKey = `${uri}//${method}//${JSON.stringify(opts)}`
 
 		return service.cache.rememberFor(cacheKey, 10, async () => {
@@ -17,9 +17,9 @@ class Spotify {
 				uri: `https://api.spotify.com/v1/${uri}`,
 				method,
 			}, opts, {
-				headers,
-				json: true,
-			})
+					headers,
+					json: true,
+				})
 
 			return request(payload)
 		})
@@ -73,6 +73,10 @@ class Spotify {
 	async getTracks(ids) {
 		if (!Array.isArray(ids)) throw 'getTracks requires an array of ids'
 		return this._request(`search`, 'GET', { qs: { ids: ids.join() } })
+	}
+
+	async getFeaturesForTrack(id) {
+		return this._request(`audio-features/${id}`)
 	}
 
 	async getFeaturesForTracks(ids) {
