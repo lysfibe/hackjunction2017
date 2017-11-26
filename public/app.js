@@ -147,4 +147,10 @@ $( document ).ready(function() {
 			$(this).find('.fa').addClass('fa-pause')
         }
     })
+
+    if ($( '.curate-screen' ).length)
+    {
+        $( '.nav__link' ).removeClass('nav__link--active');
+        $( '.nav__link--curators' ).addClass('nav__link--active');
+    }
 }); 
