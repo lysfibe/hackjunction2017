@@ -25,14 +25,12 @@
 		<div class="cell large-12 playlist-suggestion__description-container">
 			<p><%- playlist.description %></p>
 		</div>
-		<div class="cell large-12 playlist-suggestion__reasons-container">
+		<div class="cell large-12">
 			<p><strong>Recommended for you because of similar:</strong></p>
 			<% for (let score in playlist.featureScores) { %>
-			<p>
-			<% if (playlist.featureScores[score] > 70 && score != "total") { -%>
-			<span class="playlist-suggestion__reason-tag"><%= score -%>,</span>
+			<% if (playlist.featureScores[score] > 70 && score != "total") { %>
+			<span class="label success playlist-suggestion__reason-label"><%= score %></span>
 			<% }} -%>
-			</p>
 		</div>
 		<div class="cell large-12 playlist-suggestion__submit-container">
 			<button class="playlist-suggestion__submit select-me-please-daddy" data-playlist-id="<%= playlist.id %>" data-curator-id="<%= playlist.curator.id %>">Submit Track</button>
