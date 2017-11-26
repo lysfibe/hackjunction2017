@@ -67,13 +67,15 @@ class Suggest {
 
         // TODO - Refine results
         // [x] How recently music was added to the playlist 
-        // [ ] How recent the music in the playlist is
-        // [ ] Playlist length (saturation mitigation)
+        // [x] Music features
+        // [x] Playlist followers
+        // [x] Playlist length (saturation mitigation)
         // [~] Genre relevance
+        // [ ] How recent the music in the playlist is
         // [ ] Popularity of music in the list 
         // [ ] Diversity of artists
-        // [ ] Curator followers
-        // [x] How recent curator activity was
+        // [x] Curator followers
+        // [ ] How recent curator activity was
         // [ ] Number of playlists curator has
 
         // Combine multiple scores using weights
