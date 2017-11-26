@@ -76,7 +76,13 @@ class Playlist {
     }
 
     get getRecentRating() {
-        return 3;
+        const difference = parseInt((new Date() - this.dateEdited) / (1000 * 60 * 60 * 24));
+        if (difference > 100) {
+          return 0;
+        }
+        else {
+          return 100 - difference;
+        }
     }
 
     get getPopularityRating() {
