@@ -87,6 +87,18 @@ class Spotify {
 	async search(qs) {
 		return this._request(`search`, 'GET', { qs })
 	}
+
+	async depaginate(data) {
+		while (data.next) {
+
+			const url = data.next.split('/v1/')[1];
+			const res = await this._request(url);
+
+			data.items = data.items.concat(res.items);
+			data.next = res.next;
+		}
+		return data;
+	}
 }
 
 module.exports = new Spotify()

@@ -107,9 +107,16 @@ class Suggest {
         };
 
         const lookupTrackAnalysis = async p => {
+            p.tracks.features = [];
             const ids = p.tracks.items.map(t => t.track.id);
-            const response = await spotify.getFeaturesForTracks(ids);
-            p.tracks.features = response.audio_features;
+
+            let batches = [];
+            while (ids.length > 0) {
+                batches.push(ids.splice(0, 100));
+            }
+
+            const responses = await Promise.all(batches.map(ids => spotify.getFeaturesForTracks(ids)));
+            responses.map(r => p.tracks.features = p.tracks.features.concat(r.audio_features));
             // Note: This should probably merge by id with tracks.items
         };
 
@@ -169,6 +176,16 @@ class Suggest {
                 items = await Promise.all(items.map(lookupPlaylistOwner));
 
 
+                // REQUEST all playlist tracks
+                console.log(`Requesting all tracks for playlists for "${track.name}"`);
+                items = await Promise.all(items.map(async p => {
+                    if (p.tracks.next) {
+                        p.tracks = await spotify.depaginate(p.tracks);
+                    }
+                    return p;
+                }));
+
+
                 // REQUEST audio features for each track in the playlist
                 // Note: Playlist tracks are paginated, so some may be missing
                 console.log(`Requesting track audio features for "${track.name}"`);
@@ -180,7 +197,7 @@ class Suggest {
                 playlists = playlists.concat(items);
 
             } catch (err) {
-                console.error(`Error suggesting playlists for "${track.name}":\n`, err.error);
+                console.error(`Error suggesting playlists for "${track.name}":\n`, err.error || err);
                 break;
             }
         }
