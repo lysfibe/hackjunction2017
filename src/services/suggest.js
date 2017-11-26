@@ -2,9 +2,9 @@ const spotify = require('./spotify');
 const Playlist = require('../domain/playlist');
 
 const PLAYLIST_FOLLOWERS_MIN = 100;
-const PLAYLIST_TRACKS_MIN = 10;
+const PLAYLIST_TRACKS_MIN = 5;
 const DESIRED_PLAYLISTS_FROM_SEARCH = 50;
-const MAX_API_CALLS_PER_REQUEST = 10;
+const MAX_API_CALLS_PER_REQUEST = 200;
 const DISALLOW_GENERATED_PLAYLISTS = true;
 
 class Suggest {
@@ -67,23 +67,30 @@ class Suggest {
 
         // TODO - Refine results
         // [x] How recently music was added to the playlist 
-        // [ ] How recent the music in the playlist is
-        // [ ] Playlist length (saturation mitigation)
+        // [x] Music features
+        // [x] Playlist followers
+        // [x] Playlist length (saturation mitigation)
         // [~] Genre relevance
+        // [ ] How recent the music in the playlist is
         // [ ] Popularity of music in the list 
         // [ ] Diversity of artists
-        // [ ] Curator followers
-        // [x] How recent curator activity was
+        // [x] Curator followers
+        // [ ] How recent curator activity was
         // [ ] Number of playlists curator has
 
-        // TODO - Combine multiple scores using weights
+        // Combine multiple scores using weights
         playlists = playlists.map(p => {
-            p.score = p.featureScores.average;
+            // Add scoring criteria here (name, value, weight)
+            p.addScore('activity', p.recentRating, 4);
+            p.addScore('features', p.featureScores.average, 3);
+            p.addScore('popularity', p.followerRating, 2);
+            p.addScore('prestige', p.curatorFollowerRating);
+            p.addScore('length', p.lengthRating);
             return p;
         });
 
-        // Sort by descending score
-        const srt = (a, b) => a.score > b.score ? -1 : 1;
+        // Sort by weighted score (descending)
+        const srt = (a, b) => a.scores.weightedTotal > b.scores.weightedTotal ? -1 : 1;
         return playlists.sort(srt);
     }
 
