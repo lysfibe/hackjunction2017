@@ -1,6 +1,6 @@
 exports.recommend = async ctx => {
-	const params = ctx.request.params
-	const { trackID } = params
+	const params = ctx.params
+	const trackID = params.trackId
 
 	if (trackID != null) {
 		const suggest = require('../../../services/suggest')

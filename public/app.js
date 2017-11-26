@@ -11,11 +11,8 @@ $( document ).ready(function() {
         var trackID = trackURL.split('/').pop();
         
         $.ajax({
-            method: 'POST',
-            url: '/api/demos',
-            data: {
-                trackID: trackID
-            },
+            method: 'GET',
+            url: '/api/tracks/' + trackID + '/recommendations',
             success: function(res) {
                 console.log(res);
 

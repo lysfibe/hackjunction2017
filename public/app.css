@@ -282,3 +282,11 @@ small
 {
     margin-top: 105px;
 }
+
+/* Playlist Suggestions Screen */
+.playlist-suggestions
+{
+    height: calc(100% - 105px);
+    background-color: red;
+    overflow: scroll;
+}
