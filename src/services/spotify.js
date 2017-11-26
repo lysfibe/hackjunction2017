@@ -6,7 +6,7 @@ class Spotify {
 	async _request (uri, method = 'GET', opts = {}) {
 		const cacheKey = `${uri}//${method}//${JSON.stringify(opts)}`
 
-		return service.cache.rememberFor(cacheKey, 1, async () => {
+		return service.cache.rememberFor(cacheKey, 10, async () => {
 			const token = await this._auth()
 
 			const headers = opts.headers ?
@@ -72,7 +72,12 @@ class Spotify {
 
 	async getTracks(ids) {
 		if (!Array.isArray(ids)) throw 'getTracks requires an array of ids'
-		return this._request(`search`, 'GET', { qs: { ids } })
+		return this._request(`search`, 'GET', { qs: { ids: ids.join() } })
+	}
+
+	async getFeaturesForTracks(ids) {
+		if (!Array.isArray(ids)) throw 'getFeaturesForTracks requires an array of ids'
+		return this._request(`audio-features`, 'GET', { qs: { ids: ids.join() } })
 	}
 
 	async search(qs) {

@@ -1,7 +1,9 @@
 $( document ).foundation()
 
 $( document ).ready(function() {
-    
+
+    window.audioPreviews = {}
+
     /**
      * 
      * @param {string} trackURL
@@ -103,4 +105,42 @@ $( document ).ready(function() {
     }, 100);
 
     $( '#get-started-btn' ).click(getStarted);
+
+    $('body').on('click', '.select-me-please-daddy', function(e) {
+        const playlistId = $(this).data('playlist-id')
+        const curatorId = $(this).data('curator-id')
+		const trackId = $( '.submissions__demo-input' ).val().split('/').pop();
+        console.log(playlistId)
+
+        fetch('/api/demos', {
+            method: 'POST',
+            body: JSON.stringify({
+                playlistId,
+                trackId,
+                curatorId,
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then(response => response.json())
+            .then(console.log)
+            .catch(console.error)
+    })
+
+    $('body').on('click', '.track-preview', function(e) {
+        const url = $(this).data('preview-url')
+        console.log($(this).find('.fa'))
+        if (window.audioPreviews.hasOwnProperty(url)) {
+            window.audioPreviews[url].pause()
+            delete window.audioPreviews[url]
+            $(this).find('.fa').addClass('fa-play')
+            $(this).find('.fa').removeClass('fa-pause')
+        } else {
+            const audio = new Audio(url)
+            window.audioPreviews[url] = audio
+            audio.play()
+			$(this).find('.fa').removeClass('fa-play')
+			$(this).find('.fa').addClass('fa-pause')
+        }
+    })
 }); 

@@ -1,3 +1,4 @@
+const stats = require("stats-lite");
 
 class Playlist {
 
@@ -13,6 +14,9 @@ class Playlist {
         this.description = par.description;
         this.followerCount = par.followers.total;
         this.trackCount = par.tracks.total;
+
+        // Calculate audio features
+        this.features = this._calculateFeatures();
 
         // Date of most recent addition
         const additionDates = par.tracks.items.map(t => new Date(t.added_at));
@@ -39,8 +43,46 @@ class Playlist {
         }
     }
 
+    /**
+     * Calculates the mean and variance of all audio features.
+     */
+    _calculateFeatures() {
+        try {
+            // Calculate the mean and variance of a property across the playlist
+            const mv = (propName) => {
+                const values = this.source.tracks.features.map(t => t[propName]);
+                return { mean: stats.mean(values), variance: stats.variance(values) }
+            };
+
+            return {
+                danceability: mv("danceability"),
+                energy: mv("energy"),
+                key: mv("key"),
+                loudness: mv("loudness"),
+                mode: mv("mode"),
+                speechiness: mv("speechiness"),
+                acousticness: mv("acousticness"),
+                instrumentalness: mv("instrumentalness"),
+                liveness: mv("liveness"),
+                valence: mv("valence"),
+                tempo: mv("tempo"),
+                duration_ms: mv("duration_ms"),
+                time_signature: mv("time_signature")
+            }
+        }
+        catch (err) {
+            console.error('Failed to calculate audio features for playlist');
+        }
+    }
+
     get getRecentRating() {
-        return 3;
+        const difference = parseInt((new Date() - this.dateEdited) / (1000 * 60 * 60 * 24));
+        if (difference > 100) {
+          return 0;
+        }
+        else {
+          return 100 - difference;
+        }
     }
 
     get getPopularityRating() {

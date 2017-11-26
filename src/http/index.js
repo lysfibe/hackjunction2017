@@ -7,7 +7,7 @@ module.exports = function defineRoutes(router) {
 	router.get('/submission/playlists', controller('submission', 'playlists'))
 
 	router.get('/curate', controller('curate', 'index'))
-	router.get('/curate/:id', controller('curate', 'playlistById'))
+	router.get('/curate/:playlistId', controller('curate', 'playlistById'))
 
 	router.group('/api', api => {
 		api.get('/demos', controller('api/demos', 'find'))

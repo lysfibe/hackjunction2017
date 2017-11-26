@@ -28,7 +28,8 @@
   "mongodb": "^2.2.33",
   "redis": "^2.8.0",
   "request": "^2.83.0",
-  "request-promise": "^4.2.2"
+  "request-promise": "^4.2.2",
+  "stats-lite": "^2.1.0"
  },
  "devDependencies": {
   "nodemon": "^1.12.1"
